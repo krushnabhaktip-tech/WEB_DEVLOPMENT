@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My second Program 🥳</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="Light-mode">
+
+    <div class="app-box">
+        <div class="settings-container">
+            <button onclick="toggleSettingsMenu()" class="settings-icon-btr">⚙️</button>
+            <div id="settings-menu" class ="settings-dropdown hidden">
+                <h3>⚙️ settings</h3>
+                <div class="setting-item">
+                    <label>Theme:</label>
+                    <button onclick="toggleTheme()" id="theme-btn">🌙 Dark</button>
+                </div>
+                <div class="setting-item">
+                    <label>Music:</label>
+                    <input type="range" id="volume" min="0" max="10" value="5">
+                    <span>🔊</span>
+
+                </div>
+                <div class="setting-item">
+                    <button class="reset-btn" onclick="resetProfile()">🔁 Reset</button>
+
+                </div>
+            </div>
+    </div>
+
+    <h1>Welcome to FitLife ✨</h1>
+    <p>Let's set up Your profile, Buddy!</p>
+
+    <div class="profile-from">
+        <label for="username">Enter Your Name: </label>
+        <input type="text" id="username" placeholder="Type ypur nickname here..." required>
+        <button class="next-btn" onclick="goToAgePage()">Next ➡️</button>
+
+    </div>
+
+<script src="logic.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+.hidden {
+    display: none !important;
+}
+
+.settings-container {
+    position:relative;
+    text-align:right;
+    margin: 20px;
+}
+
+.settings-icon-btn {
+    font-size:24px;
+    background: none;
+    border:none;
+    cursor:pointer;
+}
+
+.settings-dropdown {
+    position:absolute;
+    right:0;
+    top:35px;
+    background: #ffffff;
+    border:1px solid #ddd;
+    padding:15px;
+    border-radius: 12px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.1);
+    text-align: left;
+    z-index: 100;
+}
