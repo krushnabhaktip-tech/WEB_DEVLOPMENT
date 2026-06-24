@@ -55,8 +55,9 @@ function toggleTheme(){
 }
 
 window.addEventListener('click',(e) => {
-const settingsMenu = document.getElementsById('settings-menu');
+const settingsmenu = document.getElementsById('settings-menu');
 const settingsBtn = document.querySelector('.settings-icon-btr');
+const dropdownContent = document.querySelector('.settings-dropdown-contains')
  
 
  
