@@ -46,7 +46,8 @@ function toggleTheme(){
      const body = document.body;
      const themeBtn = document.getElementsById('theme-btn');
 
-    body.classList.toggle(darl-mode);
+    body.classList.toggle('dark-mode');
+    
     if(body.classList.contains('dark-mode')){
         themeBtn.innerText = " 🌞 Light";
     }else {
