@@ -53,11 +53,12 @@ function toggleTheme(){
     }
 }
 
-const settingsModal = document.querySelector('.settings-card');
-const settingsBtn = document.querySelector('.settings-icon');
-
 window.addEventListener('click',(e) => {
-    if (!settingsModal.contains(e.target) && e.target ! == settingsBtn){
-        settingsModa.style.display = 'none';
+const settingsMenu = document.getElementsById('.settings-menu');
+const settingsBtn = document.querySelector('.settings-icon-btr');
+
+ 
+    if (!settingsMenu.contains(e.target) && !settingsBtn.contains(e.target) ) {
+        settingsMenu.classList.add('settings-dropdown-hidden');
     }
 });
