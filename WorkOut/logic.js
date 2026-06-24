@@ -11,4 +11,53 @@ function gotoAgePage(){
         return;
     }
     alert("Welcome,"+ nameInput +"! Now let's go to the next page.");
+    window.location.href = "age.html";
 }
+let restTime = 30;
+
+function changeRestTime(amount) {
+    restTime = restTime + amount;
+
+    if (restTime < 5) {
+        restTime = 5;
+    }
+
+    document.getElementById('rest-display').innerText = restTime + "s";
+}
+
+document.getElementById('volume').addEventListener('input',function(e){
+    let currentVolume = e.target.value;
+    console.log("Current Volume: " + currentvolume);
+});
+
+document.getElementById('music-track').addEventListener('change',function(e){
+    let selectedTrack = e.target.value;
+    console.log("Selected Track: "+ selectedTrack);
+});
+
+ 
+
+function resetSettings() {
+    restTime = 30;
+    document.getElementById('rest-display').innerText = "30s";
+}
+
+function toggleTheme(){
+    document.body.classList.toggle('dark-mode');
+
+    const themeBtn = document.getElementsById('theme-btn');
+    if(document.body.classList.contains('dark-mode')){
+        themeBtn.innerText = " 🌞 Light";
+    }else {
+        themeBtn.innerText = " 🌙 Dark";
+    }
+}
+
+const settingsModal = document.querySelector('.settings-card');
+const settingsBtn = document.querySelector('.settings-icon');
+
+window.addEventListener('click',(e) => {
+    if (!settingsModal.contains(e.target) && e.target ! == settingsBtn){
+        settingsModa.style.display = 'none';
+    }
+});
