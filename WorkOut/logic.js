@@ -60,8 +60,8 @@ const settingsBtn = document.querySelector('.settings-icon-btr');
  
 
  
-    if (!settingsMenu && !settingsMenu.classList.contains('settings-dropdown-hidden') ) {
-        if (!settingsBtn.contains(e.target) && !settingsMenu.querySelector(.settings-dropdown-contains).contains(e.target)) {
+    if (settingsMenu && !settingsMenu.classList.contains('settings-dropdown-hidden') ) {
+        if (!settingsBtn.contains(e.target) && !settingsMenu.querySelector('.settings-dropdown-contains').contains(e.target)) {
         settingsMenu.classList.add('settings-dropdown-hidden' );
         }
     }
