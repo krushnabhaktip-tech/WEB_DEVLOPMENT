@@ -57,11 +57,11 @@ function toggleTheme(){
 window.addEventListener('click',(e) => {
 const settingsMenu = document.getElementsById('settings-menu');
 const settingsBtn = document.querySelector('.settings-icon-btr');
-const dropdownContent = document.querySelector('.settings-dropdown-content');
+ 
 
  
     if (!settingsMenu && !settingsMenu.classList.contains('settings-dropdown-hidden') ) {
-        if (!settingsBtn.contains(e.target) && !settingsMenu.querySelector(e.target)) {
+        if (!settingsBtn.contains(e.target) && !settingsMenu.querySelector(.settings-dropdown-contains).contains(e.target)) {
         settingsMenu.classList.add('settings-dropdown-hidden' );
         }
     }
