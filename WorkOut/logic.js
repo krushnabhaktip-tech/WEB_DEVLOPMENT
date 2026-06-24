@@ -43,10 +43,11 @@ function resetSettings() {
 }
 
 function toggleTheme(){
-    document.body.classList.toggle('dark-mode');
+     const body = document.body;
+     const themeBtn = document.getElementsById('theme-btn');
 
-    const themeBtn = document.getElementsById('theme-btn');
-    if(document.body.classList.contains('dark-mode')){
+    body.classList.toggle(darl-mode);
+    if(body.classList.contains('dark-mode')){
         themeBtn.innerText = " 🌞 Light";
     }else {
         themeBtn.innerText = " 🌙 Dark";
@@ -54,11 +55,14 @@ function toggleTheme(){
 }
 
 window.addEventListener('click',(e) => {
-const settingsMenu = document.getElementsById('.settings-menu');
+const settingsMenu = document.getElementsById('settings-menu');
 const settingsBtn = document.querySelector('.settings-icon-btr');
+const dropdownContent = document.querySelector('.settings-dropdown-content');
 
  
-    if (!settingsMenu.contains(e.target) && !settingsBtn.contains(e.target) ) {
-        settingsMenu.classList.add('settings-dropdown-hidden');
+    if (!settingsMenu && !settingsMenu.classList.contains('settings-dropdown-hidden') ) {
+        if (!dropdownContent.contains(e.target) && !settingsBtn.contains(e.target)) {
+        settingsMenu.classList.add('settings-dropdown-hidden' );
+        }
     }
 });
