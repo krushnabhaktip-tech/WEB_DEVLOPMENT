@@ -16,9 +16,10 @@
 }
 
 .settings-dropdown {
-    position:absolute;
+    position:fixed;
     top:50px;
-    right:0;
+    left:50%;
+    transform: translate(-50%, -50%);
      
      
     width: 100%;
