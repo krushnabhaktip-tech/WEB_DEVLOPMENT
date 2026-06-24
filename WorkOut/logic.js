@@ -26,7 +26,7 @@ function changeRestTime(amount) {
 }
 
 document.getElementById('volume').addEventListener('input',function(e){
-    let currentVolume = e.target.value;
+    let currentVolume = e.target.Value;
     console.log("Current Volume: " + currentvolume);
 });
 
@@ -44,7 +44,7 @@ function resetSettings() {
 
 function toggleTheme(){
      const body = document.body;
-     const themeBtn = document.getElementsById('theme-btn');
+     const themeBtn = document.getElementById('theme-btn');
 
     body.classList.toggle('dark-mode');
     if(body.classList.contains('dark-mode')){
