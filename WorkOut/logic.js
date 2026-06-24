@@ -47,7 +47,6 @@ function toggleTheme(){
      const themeBtn = document.getElementsById('theme-btn');
 
     body.classList.toggle('dark-mode');
-
     if(body.classList.contains('dark-mode')){
         themeBtn.innerText = " 🌞 Light";
     }else {
@@ -61,8 +60,8 @@ const settingsBtn = document.querySelector('.settings-icon-btr');
 const dropdownContent = document.querySelector('.settings-dropdown-content');
 
  
-     
-        if (!settingsMenu.contains(e.target) && !settingsBtn.contains(e.target)) {
+    if (!settingsMenu && !settingsMenu.classList.contains('settings-dropdown-hidden') ) {
+        if (!settingsBtn.contains(e.target) && !settingsMenu.querySelector(e.target)) {
         settingsMenu.classList.add('settings-dropdown-hidden' );
         }
     }
