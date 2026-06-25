@@ -150,3 +150,16 @@ body.dark-mode .settings-dropdown-content label {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* Main workout box ko screen ke center me align rakhne ke liye */
+#main-workout-content {
+    display: none; /* Yeh JS se handle hoga, jab dikhega toh flex banega */
+    margin: 40px auto !important; /* Center me lane ke liye magic margin */
+    float: none !important; /* Agar kahin left/right bhatak raha ho */
+    clear: both;
+}
+
+/* Jab display: block ho JS ke throw, tab bhi layout sahi rahe */
+body #main-workout-content[style*="display: block"] {
+    display: block !important;
+}
+
