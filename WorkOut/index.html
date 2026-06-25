@@ -35,9 +35,18 @@
     </div>
 
     <div class="setting-item">
-        <label>Music Track:</label>
+        <label>music:</label>
+        <div class="music-control-row">
+            <input type="range" id="volume" min="0" max="10" value="5">
+            <span id="mute-btn" onclick="toggleMute()" style="cursor: pointer font-size:20px;">🔊</span>
+        </div>
+
+    </div>
+
+    <div class="setting-item music-track-row">
+        <label for="musuc-track">Music Track:</label>
         <select id="music-track">
-            <option value="lofi">🎵 Relaxing Lofi</option>
+            <option value="Lifi">🎶 Relaxing Lofi</option>
             <option value="energetic">⚡ Gym Beat</option>
             <option value="nature">🍃 Soft Nature</option>
         </select>
