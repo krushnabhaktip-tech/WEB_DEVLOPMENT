@@ -8,13 +8,21 @@
     margin: 20px;
 }
 
-.settings-icon-btn {
-    font-size:24px;
+ .settings-icon-btn {
+    font-size: 24px;
     background: none;
-    border:none;
-    cursor:pointer;
+    border: none;
+    cursor: pointer;
+    
+    /* આ નવો કોડ ઉમેર્યો આઇકનને રાઉન્ડ અને ખૂણામાં સેટ કરવા */
+    border-radius: 50% !important;   /* બટનને એકદમ ગોળ કરવા માટે */
+    padding: 8px !important;         /* ગોળ શેપ સરખો દેખાય એટલે સ્પેસ */
+    margin-right: 15px !important;   /* જમણી બાજુ ખૂણામાં થોડું ધકેલવા માટે */
+    margin-top: 10px !important;    /* ઉપરથી થોડી પ્રોપર સ્પેસ આપવા */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
-
 .settings-dropdown {
     position:fixed;
     top:50%;
