@@ -20,31 +20,16 @@
     top:50%;
     left:50%;
     transform: translate(-50%, -50%);
-     
-     
-   
-    /* background:rgba(0,0,0,0.5); */
-    
     z-index: 1000;
-    
 }
-
- 
 
 .settings-dropdown-content {
     background-color: #ffffff;
     width: 250px;
-    
     padding: 20px;
     border-radius: 20px;
     text-align: left;
     box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-    
-
-
-/* display:flex !important;
-flex-direction: column !important;
-text-aligh: left; */
 }
 
 .settings-dropdown-content h3,
@@ -116,6 +101,23 @@ body.dark-mode .settings-dropdown-content label {
     color: #ffffff !important;
 }
 
-/* #settings-menu h3, #settings-menu label {
-    color: #000000 !important;
-} */
+.music-control-row {
+    display:flex;
+    align-items: center;
+    gap:12px;
+}
+
+.music-track-row {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+#music-track {
+    width: auto;
+    max-width: 150px;
+    padding: 6px 10px;
+}
+
