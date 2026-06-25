@@ -42,23 +42,28 @@ const exercisesDatabase = {
 };
 
 const bgMusic = document.getElementById('bg-music');
-const volumeSlider = document.getElementById('volume');
 
- function startWorkout() {
+function startWorkout() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('main-workout-content').style.display = 'flex';
     
-    bgMusic.volume = volumeSlider.value / 10;
+    const slider = document.getElementById('volume');
+    if (slider) {
+        bgMusic.volume = slider.value / 10;
+    } else {
+        bgMusic.volume = 0.5;
+    }
     
-    var playPromise = bgMusic.play();
+    let playPromise = bgMusic.play();
     if (playPromise !== undefined) {
-        playPromise.then(function() {
-            console.log("Audio started");
-        }).catch(function(error) {
-            console.log("Audio block bypass");
+        playPromise.then(() => {
+            console.log("Audio bypass setup successful");
+        }).catch(err => {
+            console.log("Audio waiting for interactive permissions:", err);
         });
     }
 }
+
 function toggleSettingsMenu() {
     document.getElementById('settings-menu').classList.toggle('settings-dropdown-hidden');
 }
@@ -82,7 +87,7 @@ function changeMusicTrack() {
     const selectedTrack = document.getElementById('music-track').value;
     bgMusic.src = selectedTrack;
     if (!isMuted) {
-        bgMusic.play().catch(e => console.log("Track swap note:", e));
+        bgMusic.play().catch(e => console.log("Music swap tracker:", e));
     }
 }
 
@@ -97,6 +102,12 @@ function validateAndSaveProfile() {
 
     if (!name || !age || !gender || !email || !phone || !address) {
         alert("Please complete all profile details before moving forward! ⚠️");
+        return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid Email Address layout! 📧");
         return;
     }
 
@@ -226,147 +237,4 @@ function loadExercise() {
     speakVoice(`Next pose is ${ex.name}. Hold for thirty seconds.`);
 
     workoutTimer = setInterval(() => {
-        if (!isWorkoutPaused) {
-            workoutSecondsLeft--;
-            document.getElementById('timer-number-display').innerText = workoutSecondsLeft;
-            
-            if (workoutSecondsLeft <= 0) {
-                clearInterval(workoutTimer);
-                handleExerciseComplete();
-            }
-        }
-    }, 1000);
-}
-
-function togglePauseResume() {
-    isWorkoutPaused = !isWorkoutPaused;
-    document.getElementById('pause-btn').innerText = isWorkoutPaused ? "▶️ Resume" : "⏸️ Pause";
-}
-
-function skipExercise() {
-    clearInterval(workoutTimer);
-    handleExerciseComplete();
-}
-
-function handleExerciseComplete() {
-    currentExerciseIndex++;
-    if (currentExerciseIndex < 10) {
-        showRestScreen();
-    } else {
-        finishDayWorkout();
-    }
-}
-
-function showRestScreen() {
-    document.getElementById('workout-play-screen').style.display = 'none';
-    document.getElementById('rest-screen').style.display = 'block';
-    
-    workoutSecondsLeft = restTime;
-    document.getElementById('rest-number-display').innerText = workoutSecondsLeft;
-    speakVoice("Take a break.");
-
-    workoutTimer = setInterval(() => {
-        workoutSecondsLeft--;
-        document.getElementById('rest-number-display').innerText = workoutSecondsLeft;
-        if (workoutSecondsLeft <= 0) {
-            clearInterval(workoutTimer);
-            skipRest();
-        }
-    }, 1000);
-}
-
-function skipRest() {
-    clearInterval(workoutTimer);
-    document.getElementById('rest-screen').style.display = 'none';
-    document.getElementById('workout-play-screen').style.display = 'block';
-    loadExercise();
-}
-
-function finishDayWorkout() {
-    document.getElementById('workout-play-screen').style.display = 'none';
-    document.getElementById('calendar-screen').style.display = 'block';
-    
-    speakVoice("Congratulations, Buddy! Today workout is completed.");
-    alert("Day " + currentDay + " workout completed successfully! 🎉");
-    
-    totalDaysCompleted++;
-    currentDay++;
-    generateCalendarGrid();
-    updateCharts3D();
-}
-
-function updateCharts3D() {
-    document.getElementById('report-total-days').innerText = totalDaysCompleted;
-    
-    const h1 = Math.min(100, 10 + (Math.min(totalDaysCompleted, 7) * 12));
-    const h2 = Math.min(100, 10 + (Math.max(0, Math.min(totalDaysCompleted - 7, 7)) * 12));
-    const h3 = Math.min(100, 10 + (Math.max(0, Math.min(totalDaysCompleted - 14, 7)) * 12));
-    const h4 = Math.min(100, 10 + (Math.max(0, Math.min(totalDaysCompleted - 21, 9)) * 10));
-
-    document.getElementById('bar-wk1').style.height = h1 + "%";
-    document.getElementById('bar-wk2').style.height = h2 + "%";
-    document.getElementById('bar-wk3').style.height = h3 + "%";
-    document.getElementById('bar-wk4').style.height = h4 + "%";
-}
-
-function switchTab(tabName) {
-    document.getElementById('profile-setup-card').style.display = 'none';
-    document.getElementById('exercise-screen').style.display = 'none';
-    document.getElementById('calendar-screen').style.display = 'none';
-    document.getElementById('workout-play-screen').style.display = 'none';
-    document.getElementById('rest-screen').style.display = 'none';
-    document.getElementById('report-screen').style.display = 'none';
-
-    if (tabName === 'home') {
-        if (currentCategory === "") {
-            document.getElementById('exercise-screen').style.display = 'block';
-        } else {
-            document.getElementById('calendar-screen').style.display = 'block';
-            generateCalendarGrid();
-        }
-    } else if (tabName === 'report') {
-        document.getElementById('report-screen').style.display = 'block';
-        updateCharts3D();
-    }
-}
-
-function enableProfileEditing() {
-    switchTab('clear-all');
-    document.getElementById('profile-setup-card').style.display = 'block';
-    toggleUserInfoMenu();
-}
-
-function changeRestTime(amount) {
-    restTime = Math.max(5, restTime + amount);
-    document.getElementById('rest-display').innerText = restTime + "s";
-}
-
-volumeSlider.addEventListener('input', function(e) {
-    bgMusic.volume = e.target.value / 10;
-    document.getElementById('mute-btn').innerText = e.target.value > 0 ? "🔊" : "🔇";
-});
-
-function toggleMute() {
-    if (!isMuted) {
-        preMuteVolume = volumeSlider.value;
-        volumeSlider.value = 0; bgMusic.volume = 0;
-        document.getElementById('mute-btn').innerText = "🔇";
-        isMuted = true;
-    } else {
-        volumeSlider.value = preMuteVolume || 5;
-        bgMusic.volume = volumeSlider.value / 10;
-        document.getElementById('mute-btn').innerText = "🔊";
-        isMuted = false;
-    }
-}
-
-function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-    document.getElementById('theme-btn').innerText = document.body.classList.contains('dark-mode') ? "☀️ Light" : "🌙 Dark";
-}
-
-function resetProfile() {
-    restTime = 30; document.getElementById('rest-display').innerText = "30s";
-    volumeSlider.value = 5; bgMusic.volume = 0.5;
-    document.getElementById('mute-btn').innerText = "🔊";
-}
+        if (!
