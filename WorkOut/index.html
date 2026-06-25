@@ -124,4 +124,72 @@
                         </select>
                     </div>
                 </div>
-                <button class="next-btn full-width-btn" style="margin-top: 20px;" onclick="validateAndSaveProfile()">Save
+                <button class="next-btn full-width-btn" style="margin-top: 20px;" onclick="validateAndSaveProfile()">Save & Next ➡️</button>
+            </div>
+        </div>
+
+        <div class="exercise-selection-card" id="exercise-screen" style="display: none;">
+            <h1>Select Routine Category 🧘‍♀️</h1>
+            <p>Choose an exercise track tailored to your lifestyle</p>
+            <div class="exercise-options-buttons">
+                <button class="exercise-choice-btn" onclick="selectExerciseCategory('Before 18')">🧒 Exercise Before 18</button>
+                <button class="exercise-choice-btn" onclick="selectExerciseCategory('After 18')">🧑 Exercise After 18</button>
+            </div>
+        </div>
+
+        <div class="main-container-card" id="calendar-screen" style="display: none;">
+            <h2>Your 30-Day Yoga Challenge 🔥</h2>
+            <p>Current Streak: <span id="streak-count">0</span> Days ⚡</p>
+            <div class="calendar-grid" id="calendar-days-box"></div>
+        </div>
+
+        <div class="main-container-card" id="workout-play-screen" style="display: none;">
+            <div class="workout-header">
+                <h2 id="current-ex-title">Yoga Pose</h2>
+                <span id="ex-progress-count">Exercise 1 of 10</span>
+            </div>
+            <div class="animation-placeholder-box">
+                <div id="animation-emoji-graphic">🧘‍♀️</div>
+            </div>
+            <div class="timer-circle-box">
+                <div id="timer-number-display">30</div>
+            </div>
+            <div class="workout-controls-row">
+                <button class="control-btn" id="pause-btn" onclick="togglePauseResume()">⏸️ Pause</button>
+                <button class="control-btn" onclick="skipExercise()">⏭️ Skip</button>
+            </div>
+        </div>
+
+        <div class="main-container-card" id="rest-screen" style="display: none;">
+            <h2>Break Time 🥛</h2>
+            <p>Catch your breath, Buddy!</p>
+            <div class="timer-circle-box">
+                <div id="rest-number-display">30</div>
+            </div>
+            <button class="next-btn" onclick="skipRest()">Skip Break ⏭️</button>
+        </div>
+
+        <div class="main-container-card" id="report-screen" style="display: none;">
+            <h2>📊 Workout Activity Report</h2>
+            <div class="streak-badge-container">
+                <p>Total Completed Days: <span id="report-total-days">0</span> / 30</p>
+            </div>
+            <div class="chart-wrapper-3d">
+                <div class="bar-3d-container"><div class="bar-3d" id="bar-wk1" style="height: 10%"><span>Wk1</span></div></div>
+                <div class="bar-3d-container"><div class="bar-3d" id="bar-wk2" style="height: 10%"><span>Wk2</span></div></div>
+                <div class="bar-3d-container"><div class="bar-3d" id="bar-wk3" style="height: 10%"><span>Wk3</span></div></div>
+                <div class="bar-3d-container"><div class="bar-3d" id="bar-wk4" style="height: 10%"><span>Wk4</span></div></div>
+            </div>
+        </div>
+
+        <div class="bottom-nav-bar" id="app-navigation" style="display: none;">
+            <button class="nav-item" onclick="switchTab('home')">🏠 Home</button>
+            <button class="nav-item" onclick="switchTab('report')">📊 Report</button>
+            <button class="nav-item" onclick="toggleSettingsMenu()">⚙️ Settings</button>
+        </div>
+
+    </div>
+
+    <audio id="bg-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
+</body>
+</html>

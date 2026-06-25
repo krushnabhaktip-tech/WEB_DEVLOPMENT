@@ -43,24 +43,26 @@ const exercisesDatabase = {
 
 const bgMusic = document.getElementById('bg-music');
 
+window.addEventListener('DOMContentLoaded', () => {
+    loadSavedProfileData();
+});
+
 function startWorkout() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('main-workout-content').style.display = 'flex';
     
-    const slider = document.getElementById('volume');
-    if (slider) {
-        bgMusic.volume = slider.value / 10;
-    } else {
-        bgMusic.volume = 0.5;
-    }
-    
-    let playPromise = bgMusic.play();
-    if (playPromise !== undefined) {
-        playPromise.then(() => {
-            console.log("Audio bypass setup successful");
-        }).catch(err => {
-            console.log("Audio waiting for interactive permissions:", err);
+    try {
+        const slider = document.getElementById('volume');
+        if (slider) {
+            bgMusic.volume = slider.value / 10;
+        } else {
+            bgMusic.volume = 0.5;
+        }
+        bgMusic.play().catch(err => {
+            console.log("Browser music auto-play restricted, waiting for user click.");
         });
+    } catch (e) {
+        console.log("Safe bypass triggers active");
     }
 }
 
@@ -87,7 +89,7 @@ function changeMusicTrack() {
     const selectedTrack = document.getElementById('music-track').value;
     bgMusic.src = selectedTrack;
     if (!isMuted) {
-        bgMusic.play().catch(e => console.log("Music swap tracker:", e));
+        bgMusic.play().catch(e => console.log("Track change handled"));
     }
 }
 
@@ -115,6 +117,7 @@ function validateAndSaveProfile() {
 
     if (avatarType === "anime") {
         userProfile.avatarValue = document.getElementById('anime-dp-select').value;
+        saveDataToLocalStorage();
         applyAvatarToHeader();
         goToExerciseSelection();
     } else {
@@ -123,41 +126,83 @@ function validateAndSaveProfile() {
             const reader = new FileReader();
             reader.onload = function(e) {
                 userProfile.avatarValue = e.target.result;
+                saveDataToLocalStorage();
                 applyAvatarToHeader();
                 goToExerciseSelection();
             }
             reader.readAsDataURL(fileInput.files[0]);
         } else {
-            userProfile.avatarValue = "👤";
+            if(!userProfile.avatarValue) {
+                userProfile.avatarValue = "👤";
+            }
+            saveDataToLocalStorage();
             applyAvatarToHeader();
             goToExerciseSelection();
         }
     }
 }
 
+function saveDataToLocalStorage() {
+    localStorage.setItem('yoga_userProfile', JSON.stringify(userProfile));
+    localStorage.setItem('yoga_currentDay', currentDay);
+    localStorage.setItem('yoga_totalDaysCompleted', totalDaysCompleted);
+    localStorage.setItem('yoga_currentCategory', currentCategory);
+}
+
+function loadSavedProfileData() {
+    const savedProfile = localStorage.getItem('yoga_userProfile');
+    const savedDay = localStorage.getItem('yoga_currentDay');
+    const savedCompleted = localStorage.getItem('yoga_totalDaysCompleted');
+    const savedCategory = localStorage.getItem('yoga_currentCategory');
+
+    if (savedProfile) {
+        userProfile = JSON.parse(savedProfile);
+        
+        document.getElementById('username').value = userProfile.name;
+        document.getElementById('user-age').value = userProfile.age;
+        document.getElementById('user-gender').value = userProfile.gender;
+        document.getElementById('user-email').value = userProfile.email;
+        document.getElementById('user-phone').value = userProfile.phone;
+        document.getElementById('user-address').value = userProfile.address;
+
+        if (savedDay) currentDay = parseInt(savedDay);
+        if (savedCompleted) totalDaysCompleted = parseInt(savedCompleted);
+        if (savedCategory) currentCategory = savedCategory;
+
+        applyAvatarToHeader();
+    }
+}
+
 function applyAvatarToHeader() {
     const btn = document.getElementById('header-avatar-btn');
-    if (userProfile.avatarType === "anime" || userProfile.avatarValue === "👤") {
-        btn.innerHTML = `<span style="font-size:22px;">${userProfile.avatarValue}</span>`;
+    if (userProfile.avatarType === "anime" || userProfile.avatarValue === "👤" || !userProfile.avatarValue) {
+        btn.innerHTML = `<span style="font-size:22px;">${userProfile.avatarValue || "👤"}</span>`;
     } else {
         btn.innerHTML = `<img src="${userProfile.avatarValue}">`;
     }
 
-    document.getElementById('view-name').innerText = userProfile.name;
-    document.getElementById('view-age').innerText = userProfile.age;
-    document.getElementById('view-gender').innerText = userProfile.gender;
-    document.getElementById('view-email').innerText = userProfile.email;
-    document.getElementById('view-phone').innerText = userProfile.phone;
-    document.getElementById('view-address').innerText = userProfile.address;
+    document.getElementById('view-name').innerText = userProfile.name || "-";
+    document.getElementById('view-age').innerText = userProfile.age || "-";
+    document.getElementById('view-gender').innerText = userProfile.gender || "-";
+    document.getElementById('view-email').innerText = userProfile.email || "-";
+    document.getElementById('view-phone').innerText = userProfile.phone || "-";
+    document.getElementById('view-address').innerText = userProfile.address || "-";
 }
 
 function goToExerciseSelection() {
     document.getElementById('profile-setup-card').style.display = 'none';
-    document.getElementById('exercise-screen').style.display = 'block';
+    if (currentCategory === "") {
+        document.getElementById('exercise-screen').style.display = 'block';
+    } else {
+        document.getElementById('calendar-screen').style.display = 'block';
+        document.getElementById('app-navigation').style.display = 'flex';
+        generateCalendarGrid();
+    }
 }
 
 function selectExerciseCategory(category) {
     currentCategory = category;
+    saveDataToLocalStorage();
     document.getElementById('exercise-screen').style.display = 'none';
     document.getElementById('calendar-screen').style.display = 'block';
     document.getElementById('app-navigation').style.display = 'flex';
@@ -189,9 +234,13 @@ function generateCalendarGrid() {
 }
 
 function speakVoice(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    window.speechSynthesis.speak(utterance);
+    try {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        window.speechSynthesis.speak(utterance);
+    } catch(e) {
+        console.log("Voice synth feedback note");
+    }
 }
 
 function startDayWorkout(dayNum) {
@@ -237,4 +286,156 @@ function loadExercise() {
     speakVoice(`Next pose is ${ex.name}. Hold for thirty seconds.`);
 
     workoutTimer = setInterval(() => {
-        if (!
+        if (!isWorkoutPaused) {
+            workoutSecondsLeft--;
+            document.getElementById('timer-number-display').innerText = workoutSecondsLeft;
+            
+            if (workoutSecondsLeft <= 0) {
+                clearInterval(workoutTimer);
+                handleExerciseComplete();
+            }
+        }
+    }, 1000);
+}
+
+function togglePauseResume() {
+    isWorkoutPaused = !isWorkoutPaused;
+    document.getElementById('pause-btn').innerText = isWorkoutPaused ? "▶️ Resume" : "⏸️ Pause";
+}
+
+function skipExercise() {
+    clearInterval(workoutTimer);
+    handleExerciseComplete();
+}
+
+function handleExerciseComplete() {
+    currentExerciseIndex++;
+    if (currentExerciseIndex < 10) {
+        showRestScreen();
+    } else {
+        finishDayWorkout();
+    }
+}
+
+function showRestScreen() {
+    document.getElementById('workout-play-screen').style.display = 'none';
+    document.getElementById('rest-screen').style.display = 'block';
+    
+    workoutSecondsLeft = restTime;
+    document.getElementById('rest-number-display').innerText = workoutSecondsLeft;
+    speakVoice("Take a break.");
+
+    workoutTimer = setInterval(() => {
+        workoutSecondsLeft--;
+        document.getElementById('rest-number-display').innerText = workoutSecondsLeft;
+        if (workoutSecondsLeft <= 0) {
+            clearInterval(workoutTimer);
+            skipRest();
+        }
+    }, 1000);
+}
+
+function skipRest() {
+    clearInterval(workoutTimer);
+    document.getElementById('rest-screen').style.display = 'none';
+    document.getElementById('workout-play-screen').style.display = 'block';
+    loadExercise();
+}
+
+function finishDayWorkout() {
+    document.getElementById('workout-play-screen').style.display = 'none';
+    document.getElementById('calendar-screen').style.display = 'block';
+    
+    speakVoice("Congratulations, Buddy! Today workout is completed.");
+    alert("Day " + currentDay + " workout completed successfully! 🎉");
+    
+    totalDaysCompleted++;
+    currentDay++;
+    saveDataToLocalStorage();
+    generateCalendarGrid();
+    updateCharts3D();
+}
+
+function updateCharts3D() {
+    document.getElementById('report-total-days').innerText = totalDaysCompleted;
+    
+    const h1 = Math.min(100, 10 + (Math.min(totalDaysCompleted, 7) * 12));
+    const h2 = Math.min(100, 10 + (Math.max(0, Math.min(totalDaysCompleted - 7, 7)) * 12));
+    const h3 = Math.min(100, 10 + (Math.max(0, Math.min(totalDaysCompleted - 14, 7)) * 12));
+    const h4 = Math.min(100, 10 + (Math.max(0, Math.min(totalDaysCompleted - 21, 9)) * 10));
+
+    document.getElementById('bar-wk1').style.height = h1 + "%";
+    document.getElementById('bar-wk2').style.height = h2 + "%";
+    document.getElementById('bar-wk3').style.height = h3 + "%";
+    document.getElementById('bar-wk4').style.height = h4 + "%";
+}
+
+function switchTab(tabName) {
+    document.getElementById('profile-setup-card').style.display = 'none';
+    document.getElementById('exercise-screen').style.display = 'none';
+    document.getElementById('calendar-screen').style.display = 'none';
+    document.getElementById('workout-play-screen').style.display = 'none';
+    document.getElementById('rest-screen').style.display = 'none';
+    document.getElementById('report-screen').style.display = 'none';
+
+    if (tabName === 'home') {
+        if (currentCategory === "") {
+            document.getElementById('exercise-screen').style.display = 'block';
+        } else {
+            document.getElementById('calendar-screen').style.display = 'block';
+            generateCalendarGrid();
+        }
+    } else if (tabName === 'report') {
+        document.getElementById('report-screen').style.display = 'block';
+        updateCharts3D();
+    }
+}
+
+function enableProfileEditing() {
+    switchTab('clear-all');
+    document.getElementById('profile-setup-card').style.display = 'block';
+    toggleUserInfoMenu();
+}
+
+function changeRestTime(amount) {
+    restTime = Math.max(5, restTime + amount);
+    document.getElementById('rest-display').innerText = restTime + "s";
+}
+
+function changeVolumeFromSettings() {
+    const slider = document.getElementById('volume');
+    bgMusic.volume = slider.value / 10;
+    document.getElementById('mute-btn').innerText = slider.value > 0 ? "🔊" : "🔇";
+}
+
+function toggleMute() {
+    const slider = document.getElementById('volume');
+    if (!isMuted) {
+        preMuteVolume = slider.value;
+        slider.value = 0; bgMusic.volume = 0;
+        document.getElementById('mute-btn').innerText = "🔇";
+        isMuted = true;
+    } else {
+        slider.value = preMuteVolume || 5;
+        bgMusic.volume = slider.value / 10;
+        document.getElementById('mute-btn').innerText = "🔊";
+        isMuted = false;
+    }
+}
+
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    document.body.classList.toggle('Light-mode');
+    document.getElementById('theme-btn').innerText = document.body.classList.contains('dark-mode') ? "☀️ Light" : "🌙 Dark";
+}
+
+function resetProfile() {
+    localStorage.clear();
+    restTime = 30; document.getElementById('rest-display').innerText = "30s";
+    const slider = document.getElementById('volume');
+    if (slider) { slider.value = 5; }
+    bgMusic.volume = 0.5;
+    document.getElementById('mute-btn').innerText = "🔊";
+    alert("Profile storage reset completed!");
+    location.reload();
+}
