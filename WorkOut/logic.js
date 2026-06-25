@@ -69,3 +69,25 @@ const dropdownContent = document.querySelector('.settings-dropdown-content')
     }
 });
 
+let isMuted = false;
+let preMuteVolume = 5; 
+
+function toggleMute() {
+    const volumeSlider = document.getElementById('volume');
+    const muteIcon = document.getElementById('mute-btn');
+
+    if (!isMuted) {
+        
+        preMuteVolume = volumeSlider.value;
+        volumeSlider.value = 0;
+        muteIcon.innerText = "🔇";
+        isMuted = true;
+    } else {
+        // Unmute state: purani volume wapas laao
+        volumeSlider.value = preMuteVolume > 0 ? preMuteVolume : 5;
+        muteIcon.innerText = "🔊";
+        isMuted = false;
+    }
+    
+   
+}
