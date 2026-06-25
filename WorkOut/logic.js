@@ -91,3 +91,9 @@ function toggleMute() {
     
    
 }
+function startWorkout() {
+    // Start screen ko chupa do
+    document.getElementById('start-screen').style.display = 'none';
+    // Main components ko dikha do
+    document.getElementById('main-workout-content').style.display = 'block';
+}
