@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YogaFit - Wellness Journey</title>
+    <title>YogaFit - Ultimate Wellness</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="Light-mode">
@@ -15,7 +15,7 @@
     <div class="app-box" id="main-workout-content" style="display: none;">
         
         <div class="user-info-container">
-            <button class="info-icon-btn" onclick="toggleUserInfoMenu()">👤</button>
+            <button class="info-icon-btn" id="header-avatar-btn" onclick="toggleUserInfoMenu()">👤</button>
             <div id="user-info-menu" class="info-dropdown info-dropdown-hidden">
                 <div class="info-dropdown-content">
                     <h3>👤 Your Profile</h3>
@@ -25,7 +25,6 @@
                     <p><strong>Email:</strong> <span id="view-email">-</span></p>
                     <p><strong>Phone:</strong> <span id="view-phone">-</span></p>
                     <p><strong>Address:</strong> <span id="view-address">-</span></p>
-                    <div id="view-avatar-div" style="margin: 10px 0;"></div>
                     <button class="edit-profile-btn" onclick="enableProfileEditing()">✏️ Edit Profile</button>
                 </div>
             </div>
@@ -52,15 +51,17 @@
                         <label>Music Volume:</label>
                         <div class="music-control-row">
                             <input type="range" id="volume" min="0" max="10" value="5">
-                            <span id="mute-btn" onclick="toggleMute()" style="cursor: pointer; font-size:20px;">🔊</span>
+                            <span id="mute-btn" onclick="toggleMute()">🔊</span>
                         </div>
                     </div>
-                    <div class="setting-item music-track-row">
+                    <div class="setting-item">
                         <label for="music-track">Music Track:</label>
-                        <select id="music-track">
-                            <option value="Lofi">🎵 Relaxing Lofi</option>
-                            <option value="energetic">⚡ Gym Beat</option>
-                            <option value="nature">🍃 Soft Nature</option>
+                        <select id="music-track" onchange="changeMusicTrack()">
+                            <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">🎵 Lofi Dreams</option>
+                            <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">⚡ Gym Energy</option>
+                            <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">🍃 Nature Flute</option>
+                            <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">🧘 Morning Yoga Meditation</option>
+                            <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3">🕊️ Spiritual Healing</option>
                         </select>
                     </div>
                     <div class="setting-item">
@@ -73,7 +74,6 @@
         <div class="profile-card" id="profile-setup-card">
             <h1>Mindful Yoga ✨</h1>
             <p>Connect your soul and body. Setup your profile, Buddy!</p>
-            
             <div class="profile-form">
                 <div class="form-grid">
                     <div class="input-field">
@@ -106,17 +106,16 @@
                         <input type="text" id="user-address" placeholder="Your address..." required>
                     </div>
                 </div>
-
                 <div class="avatar-section">
                     <label>Choose Profile Picture Style:</label>
                     <div class="avatar-options">
                         <label><input type="radio" name="avatar-type" value="upload" checked onclick="switchAvatarView()"> 📁 Upload File</label>
                         <label><input type="radio" name="avatar-type" value="anime" onclick="switchAvatarView()"> ⚡ Anime DP</label>
                     </div>
-                    <div id="avatar-input-container" style="margin-top: 10px;">
+                    <div id="avatar-input-container">
                         <input type="file" id="user-avatar" accept="image/*">
                     </div>
-                    <div id="anime-select-container" style="margin-top: 10px; display: none;">
+                    <div id="anime-select-container" style="display: none;">
                         <select id="anime-dp-select">
                             <option value="🦊">🦊 Cool Fox</option>
                             <option value="🥷">🥷 Ninja Buddy</option>
@@ -125,7 +124,6 @@
                         </select>
                     </div>
                 </div>
-
                 <button class="next-btn full-width-btn" style="margin-top: 20px;" onclick="validateAndSaveProfile()">Save & Next ➡️</button>
             </div>
         </div>
@@ -139,6 +137,51 @@
             </div>
         </div>
 
+        <div class="main-container-card" id="calendar-screen" style="display: none;">
+            <h2>Your 30-Day Yoga Challenge 🔥</h2>
+            <p>Current Streak: <span id="streak-count">0</span> Days ⚡</p>
+            <div class="calendar-grid" id="calendar-days-box"></div>
+        </div>
+
+        <div class="main-container-card" id="workout-play-screen" style="display: none;">
+            <div class="workout-header">
+                <h2 id="current-ex-title">Yoga Pose</h2>
+                <span id="ex-progress-count">Exercise 1 of 10</span>
+            </div>
+            <div class="animation-placeholder-box">
+                <div id="animation-emoji-graphic">🧘‍♀️</div>
+            </div>
+            <div class="timer-circle-box">
+                <div id="timer-number-display">30</div>
+            </div>
+            <div class="workout-controls-row">
+                <button class="control-btn" id="pause-btn" onclick="togglePauseResume()">⏸️ Pause</button>
+                <button class="control-btn" onclick="skipExercise()">⏭️ Skip</button>
+            </div>
+        </div>
+
+        <div class="main-container-card" id="rest-screen" style="display: none;">
+            <h2>Break Time 🥛</h2>
+            <p>Catch your breath, Buddy!</p>
+            <div class="timer-circle-box">
+                <div id="rest-number-display">30</div>
+            </div>
+            <button class="next-btn" onclick="skipRest()">Skip Break ⏭️</button>
+        </div>
+
+        <div class="main-container-card" id="report-screen" style="display: none;">
+            <h2>📊 Workout Activity Report</h2>
+            <div class="streak-badge-container">
+                <p>Total Completed Days: <span id="report-total-days">0</span> / 30</p>
+            </div>
+            <div class="chart-wrapper-3d">
+                <div class="bar-3d-container"><div class="bar-3d" id="bar-wk1" style="height: 10%"><span>Wk1</span></div></div>
+                <div class="bar-3d-container"><div class="bar-3d" id="bar-wk2" style="height: 10%"><span>Wk2</span></div></div>
+                <div class="bar-3d-container"><div class="bar-3d" id="bar-wk3" style="height: 10%"><span>Wk3</span></div></div>
+                <div class="bar-3d-container"><div class="bar-3d" id="bar-wk4" style="height: 10%"><span>Wk4</span></div></div>
+            </div>
+        </div>
+
         <div class="bottom-nav-bar" id="app-navigation" style="display: none;">
             <button class="nav-item" onclick="switchTab('home')">🏠 Home</button>
             <button class="nav-item" onclick="switchTab('report')">📊 Report</button>
@@ -148,6 +191,5 @@
     </div>
 
     <audio id="bg-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
-    <script src="logic.js"></script>
 </body>
 </html>
