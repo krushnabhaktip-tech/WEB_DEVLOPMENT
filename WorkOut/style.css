@@ -166,5 +166,11 @@ body #main-workout-content[style*="display: block"] {
     display: block !important;
 }
 
-
+#start-screen > div, 
+#start-screen form,
+#start-screen .container { /* તમારા html માં જે પણ મેઈન ડિટેઈલ બોક્સ હોય તે */
+    text-align: left !important;
+    margin-right: auto !important;
+    margin-left: 50px !important; /* ડાબી બાજુથી જેટલી જગ્યા રાખવી હોય એટલી */
+}
 
