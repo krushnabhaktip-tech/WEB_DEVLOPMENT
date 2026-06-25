@@ -106,9 +106,9 @@ body.dark-mode {
     color: #ffffff !important;
 }
 
-body.dark-mode .settings-card {
+body.dark-mode .settings-dropdown-content {
     background-color: #1e1e1e;
-    color: #ffffff;
+    color: #ffffff !important;
 }
 
 #settings-menu h3, #settings-menu label {
