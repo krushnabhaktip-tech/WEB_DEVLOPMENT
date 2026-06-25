@@ -174,3 +174,7 @@ body #main-workout-content[style*="display: block"] {
     margin-left: 50px !important; /* ડાબી બાજુથી જેટલી જગ્યા રાખવી હોય એટલી */
 }
 
+#main-workout-content, 
+#main-workout-content * {
+    text-align: left !important;
+}
