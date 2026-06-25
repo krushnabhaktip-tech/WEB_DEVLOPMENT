@@ -1,4 +1,4 @@
-/* GLOBAL STYLES */
+
 * {
     margin: 0;
     padding: 0;
@@ -17,7 +17,7 @@ body.dark-mode {
     color: #ffffff !important;
 }
 
-/* START SCREEN WITH PREMIUM GYM PIC */
+
 #start-screen {
     position: fixed;
     top: 0;
@@ -43,16 +43,16 @@ body.dark-mode {
     border: none;
     border-radius: 50px;
     cursor: pointer;
-    box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4);
+    box-shadow: 0 8px 25px rgba(184, 96, 117, 0.4);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 #start-workout-btn:hover {
     transform: scale(1.05);
-    box-shadow: 0 12px 30px rgba(255, 65, 108, 0.6);
+    box-shadow: 0 12px 30px rgba(35, 125, 25, 0.429);
 }
 
-/* MAIN CONTENT BOX */
+
 .app-box {
     width: 100vw;
     height: 100vh;
@@ -61,9 +61,10 @@ body.dark-mode {
     justify-content: center;
     align-items: center;
     padding: 20px;
+    background-color: #284c43;
 }
 
-/* SETTINGS CONTAINER & ROUND CORNER BUTTON (RIGHT SIDE UPAR) */
+ 
 .settings-container {
     position: absolute;
     top: 25px;
