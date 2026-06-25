@@ -256,3 +256,20 @@ body.dark-mode .input-group input {
     background-color: #f0f0f0;
     border: none !important;
 }
+@media (max-width: 600px) {
+    #start-workout-btn { padding: 14px 30px; font-size: 18px; width: 85%; max-width: 300px; }
+    .profile-card { padding: 25px 20px; margin: 15px; width: calc(100% - 30px); border-radius: 16px; }
+    .profile-card h1 { font-size: 22px; }
+    .input-group { flex-direction: column; gap: 12px; }
+    .input-group input, .next-btn { width: 100%; padding: 12px; }
+    .settings-dropdown { width: 90vw; max-width: 280px; right: -10px; }
+}
+
+@media (min-width: 1600px) {
+    .profile-card { max-width: 600px; padding: 60px; border-radius: 32px; }
+    .profile-card h1 { font-size: 38px; }
+    .profile-card p, .profile-form label { font-size: 18px; }
+    .input-group input, .next-btn { font-size: 18px; padding: 16px; }
+    #start-workout-btn { padding: 20px 60px; font-size: 28px; }
+    .settings-icon-btn { width: 70px; height: 70px; font-size: 32px; }
+}
