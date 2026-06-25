@@ -44,9 +44,10 @@ function resetSettings() {
 
 function toggleTheme(){
      const body = document.body;
-     const themeBtn = document.getElementById('theme-btn');
-
+      
     body.classList.toggle('dark-mode');
+    const themeBtn = document.getElementById('theme-btn');
+
     if(body.classList.contains('dark-mode')){
         themeBtn.innerText = " 🌞 Light";
     }else {
