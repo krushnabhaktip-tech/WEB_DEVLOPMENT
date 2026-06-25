@@ -44,13 +44,21 @@ const exercisesDatabase = {
 const bgMusic = document.getElementById('bg-music');
 const volumeSlider = document.getElementById('volume');
 
-function startWorkout() {
+ function startWorkout() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('main-workout-content').style.display = 'flex';
+    
     bgMusic.volume = volumeSlider.value / 10;
-    bgMusic.play().catch(e => console.log("Audio target alert:", e));
+    
+    var playPromise = bgMusic.play();
+    if (playPromise !== undefined) {
+        playPromise.then(function() {
+            console.log("Audio started");
+        }).catch(function(error) {
+            console.log("Audio block bypass");
+        });
+    }
 }
-
 function toggleSettingsMenu() {
     document.getElementById('settings-menu').classList.toggle('settings-dropdown-hidden');
 }
