@@ -3,85 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My second Program 🥳</title>
+    <title>FitLife - Workout</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="Light-mode">
+
     <div id="start-screen">
-         <button id="start-workout-btn" onclick="startWorkout()">🦾 start-workout-btn</button>
+        <button id="start-workout-btn" onclick="startWorkout()">💪 Start Workout</button>
     </div>
 
-    <div  class ="app-box" id="main-workout-content" style="display: none;">
-
+    <div class="app-box" id="main-workout-content" style="display: none;">
+        
         <div class="settings-container">
-
-    <div class="app-box">
-        <div class="settings-container">
-            <button onclick= "toggleSettingsMenu()" class="settings-icon-btr">⚙️</button>
-            <div id="settings-menu" class ="settings-dropdown settings-dropdown-hidden">
+            <button class="settings-icon-btn" onclick="toggleSettingsMenu()">⚙️</button>
+            
+            <div id="settings-menu" class="settings-dropdown settings-dropdown-hidden">
                 <div class="settings-dropdown-content">
-                <h3>⚙️ settings</h3>
-                
-                 <div class="setting-item">
-                    <label>Theme:</label>
-                    <button id="theme-btn" onclick="toggleTheme()">🌙 Dark</button>
-                </div>
-                <!-- <div class="setting-item">
-                    <label>Music:</label>
-                    <input type="range" id="volume" min="0" max="10" value="5">
-                    <span>🔊</span>
-                 </div> -->
-
-    <div class="setting-item">
-        <label>Rest Time:</label>
-        <div class="rest-control">
-            <button type="button" onclick="changeRestTime(-5)">➖</button>
-            <span id="rest-display">30s</span>
-            <button type="button" onclick="changeRestTime(5)">➕</button>
-        </div>
-    </div>
-
-    <div class="setting-item">
-        <label>music:</label>
-        <div class="music-control-row">
-            <input type="range" id="volume" min="0" max="10" value="5">
-            <span id="mute-btn" onclick="toggleMute()" style="cursor: pointer font-size:20px;">🔊</span>
-        </div>
-
-    </div>
-
-    <div class="setting-item music-track-row">
-        <label for="musuc-track">Music Track:</label>
-        <select id="music-track">
-            <option value="Lifi">🎶 Relaxing Lofi</option>
-            <option value="energetic">⚡ Gym Beat</option>
-            <option value="nature">🍃 Soft Nature</option>
-        </select>
-    </div>
-
-
-                
-                <div class="setting-item">
-                    <button class="reset-btn" onclick="resetProfile()">🔁 Reset</button>
-
+                    <h3>⚙️ Settings</h3>
+                    
+                    <div class="setting-item">
+                        <label>Theme:</label>
+                        <button id="theme-btn" onclick="toggleTheme()">🌙 Dark</button>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label>Rest Time:</label>
+                        <div class="rest-control">
+                            <button type="button" onclick="changeRestTime(-5)">➖</button>
+                            <span id="rest-display">30s</span>
+                            <button type="button" onclick="changeRestTime(5)">➕</button>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label>Music Volume:</label>
+                        <div class="music-control-row">
+                            <input type="range" id="volume" min="0" max="10" value="5">
+                            <span id="mute-btn" onclick="toggleMute()" style="cursor: pointer; font-size:20px;">🔊</span>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item music-track-row">
+                        <label for="music-track">Music Track:</label>
+                        <select id="music-track">
+                            <option value="Lofi">🎵 Relaxing Lofi</option>
+                            <option value="energetic">⚡ Gym Beat</option>
+                            <option value="nature">🍃 Soft Nature</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <button class="reset-btn" onclick="resetProfile()">🔄 Reset</button>
+                    </div>
                 </div>
             </div>
-             </div>
+        </div>
+
+        <div class="profile-card">
+            <h1>Welcome to FitLife ✨</h1>
+            <p>Let's set up Your profile, Buddy!</p>
+            
+            <div class="profile-form">
+                <label for="username">Enter Your Name:</label>
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Type your nickname here..." required>
+                    <button class="next-btn" onclick="gotoAgePage()">Next ➡️</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <h1>Welcome to FitLife ✨</h1>
-    <p>Let's set up Your profile, Buddy!</p>
+    <audio id="bg-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
 
-    <div class="profile-from">
-        <label for="username">Enter Your Name: </label>
-        <input type="text" id="username" placeholder="Type ypur nickname here..." required>
-        <button class="next-btn" onclick="goToAgePage()">Next ➡️</button>
-
-    </div>
-
-<script src="logic.js"></script>
- </div>
-  </div>
-   
+    <script src="logic.js"></script>
 </body>
 </html>

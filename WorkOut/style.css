@@ -1,97 +1,15 @@
-.hidden {
-    display: none !important;
+/* GLOBAL STYLES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.settings-container {
-    position:relative;
-    text-align:right;
-    margin: 20px;
-}
-
- .settings-icon-btn {
-    font-size: 24px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    
-    /* આ નવો કોડ ઉમેર્યો આઇકનને રાઉન્ડ અને ખૂણામાં સેટ કરવા */
-    border-radius: 50% !important;   /* બટનને એકદમ ગોળ કરવા માટે */
-    padding: 8px !important;         /* ગોળ શેપ સરખો દેખાય એટલે સ્પેસ */
-    margin-right: 15px !important;   /* જમણી બાજુ ખૂણામાં થોડું ધકેલવા માટે */
-    margin-top: 10px !important;    /* ઉપરથી થોડી પ્રોપર સ્પેસ આપવા */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-.settings-dropdown {
-    position:fixed;
-    top:50%;
-    left:50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-}
-
-.settings-dropdown-content {
-    background-color: #ffffff;
-    width: 250px;
-    padding: 20px;
-    border-radius: 20px;
-    text-align: left;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-}
-
-.settings-dropdown-content h3,
-.settings-dropdown-content label {
-    color: #000000 !important;
-}
-.settings-dropdown-hidden {
-    display: none !important;
-}
-
-.settings-dropdown-content h3 {
-    font-size:28px;
-    margin-top:0;
-    margin-bottom:20px;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom:15px;
-    text-align: left;
-
-}
-
-.setting-item{
-    display:flex !important;
-    flex-direction:column !important;
-    align-items: center!important;
-    justify-content: space-between;
-    margin-bottom:30px;
-    /* width:100%; */
-}
-
-.setting-item label {
-    font-size:22px;
-    font-weight: 600;
-    margin-bottom:12px;
-    color: #333333;
-
-}
-
-.setting-item select,
-.setting-item button {
-    font-size: 18px;
-    padding:10px 18px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.rest-control {
-    display: flex;
-    align-items:center;
-    gap:25px;
-}
-
-.rest-control span {
-    font-size:22px;
-    font-weight:bold;
+body.Light-mode {
+    background-color: #f4f7f6;
+    color: #333;
 }
 
 body.dark-mode {
@@ -99,91 +17,241 @@ body.dark-mode {
     color: #ffffff !important;
 }
 
-body.dark-mode .settings-dropdown-content {
-    background-color: #1e1e1e !important;
-    color: #ffffff !important;
-}
-
-body.dark-mode .settings-dropdown-content h3,
-body.dark-mode .settings-dropdown-content label {
-    color: #ffffff !important;
-}
-
-.music-control-row {
-    display:flex;
-    align-items: center;
-    gap:12px;
-}
-
-.music-track-row {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-#music-track {
-    width: auto;
-    max-width: 150px;
-    padding: 6px 10px;
-}
-
-/* Poori screen par background image set karne ke liye */
+/* START SCREEN WITH PREMIUM GYM PIC */
 #start-screen {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1600'); 
+    background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1600');
     background-size: cover;
     background-position: center;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
+    padding-bottom: 10vh;
     z-index: 9999;
 }
 
-/* Mast gol oval shape wala Start Button */
 #start-workout-btn {
-    padding: 16px 36px;
-    font-size: 24px;
+    padding: 16px 40px;
+    font-size: 22px;
     font-weight: bold;
     color: #ffffff;
-    background: linear-gradient(135deg, #28a745, #218838);
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
     border: none;
     border-radius: 50px;
     cursor: pointer;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
- 
-#main-workout-content {
-    display: none; 
-    margin-top: 40px !important; 
-    margin-bottom: 40px !important;
-    margin-left: 50px;
-    margin-right:  auto !important;
+#start-workout-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(255, 65, 108, 0.6);
+}
+
+/* MAIN CONTENT BOX */
+.app-box {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* SETTINGS CONTAINER & ROUND CORNER BUTTON (RIGHT SIDE UPAR) */
+.settings-container {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    z-index: 1000;
+}
+
+.settings-icon-btn {
+    font-size: 26px;
+    background: white;
+    border: none;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    transition: transform 0.3s;
+}
+
+.settings-icon-btn:hover {
+    transform: rotate(45deg) scale(1.05);
+}
+
+/* SETTINGS DROPDOWN */
+.settings-dropdown {
+    position: absolute;
+    top: 65px;
+    right: 0;
+    width: 280px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.settings-dropdown-hidden {
+    display: none !important;
+}
+
+/* DARK MODE FOR SETTINGS */
+body.dark-mode .settings-dropdown {
+    background-color: #1e1e1e;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .settings-icon-btn {
+    background: #2a2a2a;
+}
+
+.settings-dropdown h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 8px;
+}
+
+body.dark-mode .settings-dropdown h3 {
+    border-bottom-color: #333;
+}
+
+.setting-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.setting-item label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+}
+
+body.dark-mode .setting-item label {
+    color: #aaa;
+}
+
+/* BUTTONS & CONTROLS INSIDE SETTINGS */
+.setting-item button, .setting-item select {
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+body.dark-mode .setting-item button, body.dark-mode .setting-item select {
+    background-color: #2a2a2a;
+    border-color: #444;
+    color: white;
+}
+
+.rest-control, .music-control-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.rest-control button {
+    padding: 5px 15px;
+}
+
+.rest-control span {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* MODERNISED PROFILE CONTENT CARD */
+.profile-card {
+    background: white;
+    padding: 40px;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    text-align: center;
+    max-width: 450px;
+    width: 100%;
+}
+
+body.dark-mode .profile-card {
+    background: #1e1e1e;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+.profile-card h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.profile-card p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+body.dark-mode .profile-card p {
+    color: #aaa;
+}
+
+.profile-form {
     text-align: left;
-    
-}    
-
-/* Jab display: block ho JS ke throw, tab bhi layout sahi rahe */
-body #main-workout-content[style*="display: block"] {
-    display: block !important;
 }
 
-#start-screen > div, 
-#start-screen form,
-#start-screen .container { /* તમારા html માં જે પણ મેઈન ડિટેઈલ બોક્સ હોય તે */
-    text-align: left !important;
-    margin-right: auto !important;
-    margin-left: 50px !important; /* ડાબી બાજુથી જેટલી જગ્યા રાખવી હોય એટલી */
+.profile-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
-#main-workout-content, 
-#main-workout-content * {
-    text-align: left !important;
+.input-group {
+    display: flex;
+    gap: 10px;
 }
- 
+
+.input-group input {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    outline: none;
+}
+
+body.dark-mode .input-group input {
+    background: #2a2a2a;
+    border-color: #444;
+    color: white;
+}
+
+.next-btn {
+    padding: 12px 20px;
+    background: #ff4b2b;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.next-btn:hover {
+    background: #ee3e1e;
+}
+
+.reset-btn {
+    width: 100%;
+    background-color: #f0f0f0;
+    border: none !important;
+}
