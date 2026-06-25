@@ -121,3 +121,32 @@ body.dark-mode .settings-dropdown-content label {
     padding: 6px 10px;
 }
 
+/* Poori screen par background image set karne ke liye */
+#start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1600'); 
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Mast gol oval shape wala Start Button */
+#start-workout-btn {
+    padding: 16px 36px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+    background: linear-gradient(135deg, #28a745, #218838);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
