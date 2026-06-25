@@ -68,3 +68,4 @@ const dropdownContent = document.querySelector('.settings-dropdown-content')
         }
     }
 });
+
