@@ -1,4 +1,4 @@
-function toggleSettingsmenu() {
+function toggleSettingsMenu() {
     const menu = document.getElementById('settings-menu');
     menu.classList.toggle('settings-dropdown-hidden');
 
