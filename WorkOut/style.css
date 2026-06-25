@@ -51,7 +51,7 @@ text-aligh: left; */
 .settings-dropdown-content label {
     color: #000000 !important;
 }
-.settings-dropdown.hidden {
+.settings-dropdown-hidden {
     display: none !important;
 }
 
