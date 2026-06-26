@@ -9,11 +9,10 @@ let userProfile = {
     name: "", age: "", gender: "", email: "", password: "", phone: "", address: "", avatarType: "upload", avatarValue: ""
 };
 
-// Global variables load hone ke baad check karenge
 let bgMusic;
 let volumeSlider;
 
-// Jaise hi DOM load ho, saare Event Listeners aur variables set kar do
+/* DOM Element binding checks */
 document.addEventListener("DOMContentLoaded", () => {
     bgMusic = document.getElementById('bg-music');
     volumeSlider = document.getElementById('volume');
@@ -28,14 +27,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-/* Window objects taaki HTML click functions Chrome me perfectly chalein */
+/* Explicit mapping for direct click execution in Chrome windows */
 window.startWorkout = function() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('main-workout-content').style.display = 'block';
     
     if(bgMusic && volumeSlider) {
         bgMusic.volume = volumeSlider.value / 10;
-        bgMusic.play().catch(e => console.log("Audio play notice:", e));
+        bgMusic.play().catch(e => console.log("Audio play update notification:", e));
     }
 };
 
@@ -53,7 +52,7 @@ window.switchAvatarView = function() {
     document.getElementById('anime-select-container').style.display = (type === "anime") ? "block" : "none";
 };
 
-/* Form validation and handling */
+/* Primary profile processing step */
 window.validateAndSaveProfile = async function() {
     const name = document.getElementById('username').value.trim();
     const age = document.getElementById('user-age').value.trim();
@@ -94,6 +93,7 @@ window.validateAndSaveProfile = async function() {
     }
 };
 
+/* Database synchronization function */
 async function sendDataToFirebase() {
     try {
         const docRef = await addDoc(collection(db, "users"), {
@@ -107,11 +107,11 @@ async function sendDataToFirebase() {
             avatarValue: userProfile.avatarValue,
             createdAt: new Date()
         });
-        console.log("Saved ID: ", docRef.id);
+        console.log("Saved: ", docRef.id);
         showExerciseScreen();
     } catch (error) {
-        console.error("Firebase Error: ", error);
-        showExerciseScreen(); // Fallback taaki testing na ruke
+        console.error("Database status tracking:", error);
+        showExerciseScreen(); 
     }
 }
 
@@ -136,11 +136,11 @@ function showExerciseScreen() {
 }
 
 window.selectExerciseCategory = function(category) {
-    alert(`⚡ Routine Initiated: '${category}' track is starting!`);
+    alert(`⚡ Routine Initiated: '${category}' track timing sequence active!`);
 };
 
 window.switchTab = function(tabName) {
-    console.log(`Tab switched to: ${tabName}`);
+    console.log(`Tab event: ${tabName}`);
 };
 
 window.enableProfileEditing = function() {
