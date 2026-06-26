@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,86 +6,82 @@
     <title>YogaFit - Wellness Journey</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="Light-mode">
+<body class="light-mode">
 
     <div id="start-screen">
-        <button id="start-workout-btn" onclick="startWorkout()">🧘 Begin Yoga Journey</button>
+        <button id="start-workout-btn" onclick="startWorkout()">🧘‍♂️ Begin Yoga Journey</button>
     </div>
 
     <div class="app-box" id="main-workout-content" style="display: none;">
         
         <div class="user-info-container">
-            <button class="info-icon-btn" onclick="toggleUserInfoMenu()">👤</button>
-            <div id="user-info-menu" class="info-dropdown info-dropdown-hidden">
-                <div class="info-dropdown-content">
-                    <h3>👤 Your Profile</h3>
-                    <p><strong>Name:</strong> <span id="view-name">-</span></p>
-                    <p><strong>Age:</strong> <span id="view-age">-</span></p>
-                    <p><strong>Gender:</strong> <span id="view-gender">-</span></p>
-                    <p><strong>Email:</strong> <span id="view-email">-</span></p>
-                    <p><strong>Phone:</strong> <span id="view-phone">-</span></p>
-                    <p><strong>Address:</strong> <span id="view-address">-</span></p>
-                    <div id="view-avatar-div" style="margin: 10px 0;"></div>
-                    <button class="edit-profile-btn" onclick="enableProfileEditing()">✏️ Edit Profile</button>
-                </div>
+            <button class="info-icon-btn" onclick="toggleUserInfoMenu()">👤 Profile</button>
+            <div class="info-dropdown info-dropdown-hidden" id="user-info-menu">
+                <h3>✨ Your Profile</h3>
+                <p><strong>📛 Name:</strong> <span id="view-name">-</span></p>
+                <p><strong>🎂 Age:</strong> <span id="view-age">-</span></p>
+                <p><strong>🧬 Gender:</strong> <span id="view-gender">-</span></p>
+                <p><strong>📧 Email:</strong> <span id="view-email">-</span></p>
+                <p><strong>📞 Phone:</strong> <span id="view-phone">-</span></p>
+                <p><strong>📍 Address:</strong> <span id="view-address">-</span></p>
+                <div id="view-avatar-div" style="margin: 10px 0;"></div>
+                <button class="edit-profile-btn" onclick="enableProfileEditing()">✏️ Edit Profile</button>
             </div>
         </div>
 
         <div class="settings-container">
-            <button class="settings-icon-btn" onclick="toggleSettingsMenu()">⚙️</button>
-            <div id="settings-menu" class="settings-dropdown settings-dropdown-hidden">
-                <div class="settings-dropdown-content">
-                    <h3>⚙️ Settings</h3>
-                    <div class="setting-item">
-                        <label>Theme:</label>
-                        <button id="theme-btn" onclick="toggleTheme()">🌙 Dark</button>
+            <button class="settings-icon-btn" onclick="toggleSettingsMenu()">⚙️ Settings</button>
+            <div class="settings-dropdown settings-dropdown-hidden" id="settings-menu">
+                <h3>🛠️ Settings</h3>
+                <div class="setting-item">
+                    <label>🎨 Theme:</label>
+                    <button id="theme-btn" onclick="toggleTheme()">🌙 Dark</button>
+                </div>
+                <div class="setting-item">
+                    <label>⏱️ Rest Time:</label>
+                    <div class="rest-control">
+                        <button onclick="changeRestTime(-5)">➖</button>
+                        <span id="rest-display">30s</span>
+                        <button onclick="changeRestTime(5)">➕</button>
                     </div>
-                    <div class="setting-item">
-                        <label>Rest Time:</label>
-                        <div class="rest-control">
-                            <button type="button" onclick="changeRestTime(-5)">➖</button>
-                            <span id="rest-display">30s</span>
-                            <button type="button" onclick="changeRestTime(5)">➕</button>
-                        </div>
+                </div>
+                <div class="setting-item">
+                    <label>🎵 Audio Volume:</label>
+                    <div class="music-control-row">
+                        <input type="range" id="volume" min="0" max="10" value="5">
+                        <span id="mute-btn" onclick="toggleMute()" style="cursor: pointer; font-size: 20px;">🔊</span>
                     </div>
-                    <div class="setting-item">
-                        <label>Music Volume:</label>
-                        <div class="music-control-row">
-                            <input type="range" id="volume" min="0" max="10" value="5">
-                            <span id="mute-btn" onclick="toggleMute()" style="cursor: pointer; font-size:20px;">🔊</span>
-                        </div>
-                    </div>
-                    <div class="setting-item music-track-row">
-                        <label for="music-track">Music Track:</label>
-                        <select id="music-track">
-                            <option value="Lofi">🎵 Relaxing Lofi</option>
-                            <option value="energetic">⚡ Gym Beat</option>
-                            <option value="nature">🍃 Soft Nature</option>
-                        </select>
-                    </div>
-                    <div class="setting-item">
-                        <button class="reset-btn" onclick="resetProfile()">🔄 Reset</button>
-                    </div>
+                </div>
+                <div class="setting-item">
+                    <label>🎼 Background Track:</label>
+                    <select id="music-track">
+                        <option value="energetic">⚡ Gym Beat</option>
+                        <option value="nature">🍃 Soft Nature</option>
+                        <option value="lofi" selected>🎵 Relaxing Lofi</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <button class="reset-btn" onclick="resetProfile()">🔄 Reset App</button>
                 </div>
             </div>
         </div>
 
         <div class="profile-card" id="profile-setup-card">
-            <h1>Mindful Yoga ✨</h1>
+            <h1>Mindful Yoga 🧘‍♀️</h1>
             <p>Connect your soul and body. Setup your profile, Buddy!</p>
             
-            <div class="profile-form">
+            <form class="profile-form" onsubmit="event.preventDefault();">
                 <div class="form-grid">
                     <div class="input-field">
-                        <label>Enter Your Name:</label>
+                        <label>👤 Enter Your Name:</label>
                         <input type="text" id="username" placeholder="Your nickname..." required>
                     </div>
                     <div class="input-field">
-                        <label>Enter Your Age:</label>
+                        <label>🎂 Enter Your Age:</label>
                         <input type="number" id="user-age" placeholder="Your age..." required>
                     </div>
                     <div class="input-field">
-                        <label>Gender:</label>
+                        <label>🧬 Gender:</label>
                         <select id="user-gender" required>
                             <option value="">Select Gender</option>
                             <option value="Female">Female</option>
@@ -94,60 +90,25 @@
                         </select>
                     </div>
                     <div class="input-field">
-                        <label>Email ID:</label>
+                        <label>📧 Email ID:</label>
                         <input type="email" id="user-email" placeholder="example@mail.com" required>
                     </div>
                     <div class="input-field">
-                        <label>Phone Number:</label>
-                        <input type="tel" id="user-phone" placeholder="Phone number..." required>
+                        <label>🔒 Setup Profile Password:</label>
+                        <input type="password" id="user-password" placeholder="Min 6 characters..." required>
                     </div>
                     <div class="input-field">
-                        <label>Address:</label>
-                        <input type="text" id="user-address" placeholder="Your address..." required>
+                        <label>📞 Phone Number:</label>
+                        <input type="tel" id="user-phone" placeholder="Phone number..." required>
                     </div>
+                </div>
+
+                <div class="input-field" style="margin-top: 15px;">
+                    <label>📍 Address:</label>
+                    <input type="text" id="user-address" placeholder="Your address..." required>
                 </div>
 
                 <div class="avatar-section">
-                    <label>Choose Profile Picture Style:</label>
+                    <label>🖼️ Choose Profile Picture Style:</label>
                     <div class="avatar-options">
-                        <label><input type="radio" name="avatar-type" value="upload" checked onclick="switchAvatarView()"> 📁 Upload File</label>
-                        <label><input type="radio" name="avatar-type" value="anime" onclick="switchAvatarView()"> ⚡ Anime DP</label>
-                    </div>
-                    <div id="avatar-input-container" style="margin-top: 10px;">
-                        <input type="file" id="user-avatar" accept="image/*">
-                    </div>
-                    <div id="anime-select-container" style="margin-top: 10px; display: none;">
-                        <select id="anime-dp-select">
-                            <option value="🦊">🦊 Cool Fox</option>
-                            <option value="🥷">🥷 Ninja Buddy</option>
-                            <option value="🐼">🐼 Cute Panda</option>
-                            <option value="🦸‍♀️">🦸‍♀️ Cyber Girl</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button class="next-btn full-width-btn" style="margin-top: 20px;" onclick="validateAndSaveProfile()">Save & Next ➡️</button>
-            </div>
-        </div>
-
-        <div class="exercise-selection-card" id="exercise-screen" style="display: none;">
-            <h1>Select Routine Category 🧘‍♀️</h1>
-            <p>Choose an exercise track tailored to your lifestyle</p>
-            <div class="exercise-options-buttons">
-                <button class="exercise-choice-btn" onclick="selectExerciseCategory('Before 18')">🧒 Exercise Before 18</button>
-                <button class="exercise-choice-btn" onclick="selectExerciseCategory('After 18')">🧑 Exercise After 18</button>
-            </div>
-        </div>
-
-        <div class="bottom-nav-bar" id="app-navigation" style="display: none;">
-            <button class="nav-item" onclick="switchTab('home')">🏠 Home</button>
-            <button class="nav-item" onclick="switchTab('report')">📊 Report</button>
-            <button class="nav-item" onclick="toggleSettingsMenu()">⚙️ Settings</button>
-        </div>
-
-    </div>
-
-    <audio id="bg-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
-    <script type="module" src="logic.js"></script>
-</body>
-</html>
+                        <label><input

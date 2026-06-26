@@ -1,76 +1,99 @@
-import { db } frpm "./firebase.js";
-import { collection, addDoc } "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { db } from "./firebase.js";
+import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 let restTime = 30;
 let isMuted = false;
 let preMuteVolume = 5;
 
 let userProfile = {
-    name: "", age: "", gender: "", email: "", phone: "", address: "", avatarType: "upload", avatarValue: ""
+    name: "", age: "", gender: "", email: "", password: "", phone: "", address: "", avatarType: "upload", avatarValue: ""
 };
 
 const bgMusic = document.getElementById('bg-music');
 const volumeSlider = document.getElementById('volume');
 
-function startWorkout() {
+/* Start button logic */
+window.startWorkout = function() {
     document.getElementById('start-screen').style.display = 'none';
-    document.getElementById('main-workout-content').style.display = 'flex';
+    document.getElementById('main-workout-content').style.display = 'block';
     bgMusic.volume = volumeSlider.value / 10;
-    bgMusic.play().catch(e => console.log("Audio play update error:", e));
-}
+    bgMusic.play().catch(e => console.log("Audio update notification:", e));
+};
 
-function toggleSettingsMenu() {
+window.toggleSettingsMenu = function() {
     document.getElementById('settings-menu').classList.toggle('settings-dropdown-hidden');
-}
+};
 
-// Left side user profile panel trigger
-function toggleUserInfoMenu() {
+window.toggleUserInfoMenu = function() {
     document.getElementById('user-info-menu').classList.toggle('info-dropdown-hidden');
-}
+};
 
-function switchAvatarView() {
+window.switchAvatarView = function() {
     const type = document.querySelector('input[name="avatar-type"]:checked').value;
-    if (type === "upload") {
-        document.getElementById('avatar-input-container').style.display = "block";
-        document.getElementById('anime-select-container').style.display = "none";
-    } else {
-        document.getElementById('avatar-input-container').style.display = "none";
-        document.getElementById('anime-select-container').style.display = "block";
-    }
-}
+    document.getElementById('avatar-input-container').style.display = (type === "upload") ? "block" : "none";
+    document.getElementById('anime-select-container').style.display = (type === "anime") ? "block" : "none";
+};
 
-function validateAndSaveProfile() {
+/* Form check and save */
+window.validateAndSaveProfile = async function() {
     const name = document.getElementById('username').value.trim();
     const age = document.getElementById('user-age').value.trim();
     const gender = document.getElementById('user-gender').value;
     const email = document.getElementById('user-email').value.trim();
+    const password = document.getElementById('user-password').value;
     const phone = document.getElementById('user-phone').value.trim();
     const address = document.getElementById('user-address').value.trim();
     const avatarType = document.querySelector('input[name="avatar-type"]:checked').value;
 
-    if (!name || !age || !gender || !email || !phone || !address) {
-        alert("Please complete all profile details before moving forward! ⚠️");
+    if (!name || !age || !gender || !email || !password || !phone || !address) {
+        alert("Please complete all details (including password) before moving forward! ⚠️");
+        return;
+    }
+    if (password.length < 6) {
+        alert("Password must be at least 6 characters long! 🔐");
         return;
     }
 
-    userProfile = { name, age, gender, email, phone, address, avatarType };
+    userProfile = { name, age, gender, email, password, phone, address, avatarType };
 
     if (avatarType === "anime") {
         userProfile.avatarValue = document.getElementById('anime-dp-select').value;
-        showExerciseScreen();
+        await sendDataToFirebase();
     } else {
         const fileInput = document.getElementById('user-avatar');
         if (fileInput.files && fileInput.files[0]) {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                userProfile.avatarValue = e.target.result;
-                showExerciseScreen();
-            }
+            reader.onload = async function(e) {
+                userProfile.avatarValue = e.target.result; 
+                await sendDataToFirebase();
+            };
             reader.readAsDataURL(fileInput.files[0]);
         } else {
             userProfile.avatarValue = "👤";
-            showExerciseScreen();
+            await sendDataToFirebase();
         }
+    }
+};
+
+/* Sending to cloud firestore */
+async function sendDataToFirebase() {
+    try {
+        const docRef = await addDoc(collection(db, "users"), {
+            name: userProfile.name,
+            age: userProfile.age,
+            gender: userProfile.gender,
+            email: userProfile.email,
+            phone: userProfile.phone,
+            address: userProfile.address,
+            avatarType: userProfile.avatarType,
+            avatarValue: userProfile.avatarValue,
+            createdAt: new Date()
+        });
+        console.log("Saved: ", docRef.id);
+        showExerciseScreen();
+    } catch (error) {
+        console.error("Error: ", error);
+        showExerciseScreen();
     }
 }
 
@@ -83,10 +106,10 @@ function showExerciseScreen() {
     document.getElementById('view-address').innerText = userProfile.address;
 
     const avatarDiv = document.getElementById('view-avatar-div');
-    if (userProfile.avatarType === "anime" || userProfile.avatarValue === "👤") {
+    if (userProfile.avatarType === "anime") {
         avatarDiv.innerHTML = `<span style="font-size: 40px;">${userProfile.avatarValue}</span>`;
     } else {
-        avatarDiv.innerHTML = `<img src="${userProfile.avatarValue}" style="width:45px; height:45px; border-radius:50%; object-fit:cover;">`;
+        avatarDiv.innerHTML = `<img src="${userProfile.avatarValue}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">`;
     }
 
     document.getElementById('profile-setup-card').style.display = 'none';
@@ -94,59 +117,64 @@ function showExerciseScreen() {
     document.getElementById('app-navigation').style.display = 'flex';
 }
 
-function selectExerciseCategory(category) {
-    alert("You selected " + category + " track! Your timeline navigation is ready.");
-}
+window.selectExerciseCategory = function(category) {
+    alert(`⚡ Routine Initiated: '${category}' track timeline is synchronizing!`);
+};
 
-function switchTab(tabName) {
-    alert("Navigating to " + tabName.toUpperCase() + " section.");
-}
+window.switchTab = function(tabName) {
+    console.log(`Tab: ${tabName}`);
+};
 
-function enableProfileEditing() {
+window.enableProfileEditing = function() {
+    toggleUserInfoMenu();
     document.getElementById('profile-setup-card').style.display = 'block';
     document.getElementById('exercise-screen').style.display = 'none';
-    
-    document.getElementById('username').value = userProfile.name;
-    document.getElementById('user-age').value = userProfile.age;
-    document.getElementById('user-gender').value = userProfile.gender;
-    document.getElementById('user-email').value = userProfile.email;
-    document.getElementById('user-phone').value = userProfile.phone;
-    document.getElementById('user-address').value = userProfile.address;
-    
-    toggleUserInfoMenu();
-}
+};
 
-function changeRestTime(amount) {
+/* Rest counter settings */
+window.changeRestTime = function(amount) {
     restTime = Math.max(5, restTime + amount);
     document.getElementById('rest-display').innerText = restTime + "s";
-}
+};
 
 volumeSlider.addEventListener('input', function(e) {
     bgMusic.volume = e.target.value / 10;
-    document.getElementById('mute-btn').innerText = e.target.value > 0 ? "🔊" : "🔇";
+    document.getElementById('mute-btn').innerText = bgMusic.volume > 0 ? "🔊" : "🔇";
 });
 
-function toggleMute() {
+window.toggleMute = function() {
     if (!isMuted) {
         preMuteVolume = volumeSlider.value;
-        volumeSlider.value = 0; bgMusic.volume = 0;
+        volumeSlider.value = 0;
+        bgMusic.volume = 0;
         document.getElementById('mute-btn').innerText = "🔇";
         isMuted = true;
     } else {
-        volumeSlider.value = preMuteVolume || 5;
-        bgMusic.volume = volumeSlider.value / 10;
+        volumeSlider.value = preMuteVolume;
+        bgMusic.volume = preMuteVolume / 10;
         document.getElementById('mute-btn').innerText = "🔊";
         isMuted = false;
     }
-}
+};
 
-function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-    document.getElementById('theme-btn').innerText = document.body.classList.contains('dark-mode') ? "☀️ Light" : "🌙 Dark";
-}
+window.toggleTheme = function() {
+    const body = document.body;
+    body.classList.toggle('dark-mode');
+    body.classList.toggle('light-mode');
+    const isDark = body.classList.contains('dark-mode');
+    document.getElementById('theme-btn').innerText = isDark ? "☀️ Light" : "🌙 Dark";
+};
 
-function resetProfile() {
-    restTime = 30; document.getElementById('rest-display').innerText = "30s";
-    volumeSlider.value = 5; bgMusic.volume = 0.5;
-    document.getElementById('mute-btn').innerText = "🔊";
-}
+/* Reset everything */
+window.resetProfile = function() {
+    document.getElementById('username').value = '';
+    document.getElementById('user-age').value = '';
+    document.getElementById('user-gender').value = '';
+    document.getElementById('user-email').value = '';
+    document.getElementById('user-password').value = '';
+    document.getElementById('user-phone').value = '';
+    document.getElementById('user-address').value = '';
+    restTime = 30;
+    document.getElementById('rest-display').innerText = "30s";
+    location.reload();
+};
