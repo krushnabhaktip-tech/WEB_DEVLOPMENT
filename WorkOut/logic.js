@@ -9,15 +9,34 @@ let userProfile = {
     name: "", age: "", gender: "", email: "", password: "", phone: "", address: "", avatarType: "upload", avatarValue: ""
 };
 
-const bgMusic = document.getElementById('bg-music');
-const volumeSlider = document.getElementById('volume');
+// Global variables load hone ke baad check karenge
+let bgMusic;
+let volumeSlider;
 
-/* Start button logic */
+// Jaise hi DOM load ho, saare Event Listeners aur variables set kar do
+document.addEventListener("DOMContentLoaded", () => {
+    bgMusic = document.getElementById('bg-music');
+    volumeSlider = document.getElementById('volume');
+
+    if(volumeSlider) {
+        volumeSlider.addEventListener('input', function(e) {
+            if(bgMusic) {
+                bgMusic.volume = e.target.value / 10;
+                document.getElementById('mute-btn').innerText = bgMusic.volume > 0 ? "🔊" : "🔇";
+            }
+        });
+    }
+});
+
+/* Window objects taaki HTML click functions Chrome me perfectly chalein */
 window.startWorkout = function() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('main-workout-content').style.display = 'block';
-    bgMusic.volume = volumeSlider.value / 10;
-    bgMusic.play().catch(e => console.log("Audio update notification:", e));
+    
+    if(bgMusic && volumeSlider) {
+        bgMusic.volume = volumeSlider.value / 10;
+        bgMusic.play().catch(e => console.log("Audio play notice:", e));
+    }
 };
 
 window.toggleSettingsMenu = function() {
@@ -34,7 +53,7 @@ window.switchAvatarView = function() {
     document.getElementById('anime-select-container').style.display = (type === "anime") ? "block" : "none";
 };
 
-/* Form check and save */
+/* Form validation and handling */
 window.validateAndSaveProfile = async function() {
     const name = document.getElementById('username').value.trim();
     const age = document.getElementById('user-age').value.trim();
@@ -46,7 +65,7 @@ window.validateAndSaveProfile = async function() {
     const avatarType = document.querySelector('input[name="avatar-type"]:checked').value;
 
     if (!name || !age || !gender || !email || !password || !phone || !address) {
-        alert("Please complete all details (including password) before moving forward! ⚠️");
+        alert("Please complete all details before moving forward! ⚠️");
         return;
     }
     if (password.length < 6) {
@@ -75,7 +94,6 @@ window.validateAndSaveProfile = async function() {
     }
 };
 
-/* Sending to cloud firestore */
 async function sendDataToFirebase() {
     try {
         const docRef = await addDoc(collection(db, "users"), {
@@ -89,11 +107,11 @@ async function sendDataToFirebase() {
             avatarValue: userProfile.avatarValue,
             createdAt: new Date()
         });
-        console.log("Saved: ", docRef.id);
+        console.log("Saved ID: ", docRef.id);
         showExerciseScreen();
     } catch (error) {
-        console.error("Error: ", error);
-        showExerciseScreen();
+        console.error("Firebase Error: ", error);
+        showExerciseScreen(); // Fallback taaki testing na ruke
     }
 }
 
@@ -118,11 +136,11 @@ function showExerciseScreen() {
 }
 
 window.selectExerciseCategory = function(category) {
-    alert(`⚡ Routine Initiated: '${category}' track timeline is synchronizing!`);
+    alert(`⚡ Routine Initiated: '${category}' track is starting!`);
 };
 
 window.switchTab = function(tabName) {
-    console.log(`Tab: ${tabName}`);
+    console.log(`Tab switched to: ${tabName}`);
 };
 
 window.enableProfileEditing = function() {
@@ -131,16 +149,10 @@ window.enableProfileEditing = function() {
     document.getElementById('exercise-screen').style.display = 'none';
 };
 
-/* Rest counter settings */
 window.changeRestTime = function(amount) {
     restTime = Math.max(5, restTime + amount);
     document.getElementById('rest-display').innerText = restTime + "s";
 };
-
-volumeSlider.addEventListener('input', function(e) {
-    bgMusic.volume = e.target.value / 10;
-    document.getElementById('mute-btn').innerText = bgMusic.volume > 0 ? "🔊" : "🔇";
-});
 
 window.toggleMute = function() {
     if (!isMuted) {
@@ -165,16 +177,6 @@ window.toggleTheme = function() {
     document.getElementById('theme-btn').innerText = isDark ? "☀️ Light" : "🌙 Dark";
 };
 
-/* Reset everything */
 window.resetProfile = function() {
-    document.getElementById('username').value = '';
-    document.getElementById('user-age').value = '';
-    document.getElementById('user-gender').value = '';
-    document.getElementById('user-email').value = '';
-    document.getElementById('user-password').value = '';
-    document.getElementById('user-phone').value = '';
-    document.getElementById('user-address').value = '';
-    restTime = 30;
-    document.getElementById('rest-display').innerText = "30s";
     location.reload();
 };
