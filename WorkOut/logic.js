@@ -1,3 +1,6 @@
+import { db } frpm "./firebase.js";
+import { collection, addDoc } "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
 let restTime = 30;
 let isMuted = false;
 let preMuteVolume = 5;
