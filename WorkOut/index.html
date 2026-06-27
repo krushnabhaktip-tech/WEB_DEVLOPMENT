@@ -6,20 +6,20 @@
     <title>Workout Hub 🎯</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="dark-mode">
+<body class="dark-mode" onclick="startBackgroundMusic()">
 
     <div id="app-box">
-        <!-- Welcome Screen -->
+        <!-- 1. Welcome Screen (Fixed Small Button View) -->
         <div id="welcome-screen" class="profile-card welcome-card">
-            <h2> Welcome to Workout Hub 🦾</h2>
-            <p style="text-align: center; color: rgba(255,255,255,0.7); margin-top: -5px;">Your Ultimate Fitness Companion ⚡</p>
+            <h2>Welcome to Workout Hub 💪</h2>
+            <p class="sub-text">Your Ultimate Fitness Companion ⚡</p>
             <div class="welcome-spacer"></div>
-            <button class="next-btn start-btn" onclick="startApp()">Start Workout (❁´◡`❁)</button>
+            <button class="round-btn btn-start" onclick="startApp()">Start Workout 😊</button>
         </div>
 
-        <!-- Profile Setup / View Card -->
+        <!-- 2. Profile Setup (Fixed White Input/Hover Text issues) -->
         <div id="profile-setup-card" class="profile-card" style="display: none;">
-            <h2 id="profile-card-title">📝 Create Profile</h2>
+            <h2>📝 Create Profile</h2>
             
             <div class="form-grid">
                 <div>
@@ -41,19 +41,6 @@
                     <label>📧 Email</label>
                     <input type="email" id="user-email" placeholder="Enter email">
                 </div>
-                <div>
-                    <label>🔒 Password</label>
-                    <input type="password" id="user-password" placeholder="•••••">
-                </div>
-                <div>
-                    <label>📞 Phone Number</label>
-                    <input type="text" id="user-phone" placeholder="Enter phone">
-                </div>
-            </div>
-
-            <div style="margin-top: 15px;">
-                <label>📍 Address</label>
-                <input type="text" id="user-address" placeholder="Enter address">
             </div>
 
             <div style="margin-top: 15px;">
@@ -70,119 +57,95 @@
 
             <div id="anime-select-container" style="margin-top: 10px; display: none;">
                 <select id="anime-dp-select">
-                    <option value="images/naruto.png"> Naruto Uzumaki </option>
-                    <option value="images/kamado.png"> Tanjiro Kamado </option>
-                    <option value="images/kakashi.png"> kakashi </option>
-                    <option value="images/narutof.png"> naruto All</option>
-                    <option value="images/gojo.png"> gojo saturo</option>
-                    <option value="images/saske.png"> saske</option>
-                    <option value="images/nezuko.png"> nezuko</option>
-                    <option value="images/yuji.png"> yuji itadori</option>
-                    <option value="images/marin.png"> marin </option>
-                    <option value="images/aniya.png"> aniya </option>
-                    <option value="images/gril.png"> gril </option>
+                    <option value="images/naruto.png">Naruto Uzumaki</option>
+                    <option value="images/nezuko.png">Nezuko</option>
+                    <option value="images/gojo.png">Gojo Satoru</option>
                 </select>
             </div>
 
             <div style="margin-top: 25px; display: flex; gap: 12px;">
-                <button class="next-btn" id="save-profile-btn" onclick="validateAndSaveProfile()" style="flex: 1;">Save & Continue ➡️</button>
-                <button class="nav-item-btn" id="back-to-dash-btn" onclick="backToDashboard()" style="display: none;">Cancel ❌</button>
+                <button class="round-btn btn-start" onclick="validateAndSaveProfile()">Save & Continue ➡️</button>
             </div>
         </div>
 
-        <!-- Exercise Dashboard Screen -->
+        <!-- 3. Exercise Dashboard Screen -->
         <div id="exercise-screen" class="profile-card" style="display: none;">
             <div class="dashboard-header">
-                <button class="settings-circle-btn" id="settings-toggle-icon" onclick="toggleSettingsPanel()">⚙️</button>
-                <h2 id="dashboard-title" style="font-size: 22px; margin: 0;">Exercise Dashboard</h2>
-                <div id="view-avatar-div" class="avatar-circle clickable-avatar" onclick="goToProfile()" title="View/Edit Profile"></div>
+                <button class="settings-circle-btn" onclick="toggleSettingsPanel()">⚙️</button>
+                <h2 style="font-size: 20px; margin: 0;">Exercise Dashboard</h2>
+                <div id="view-avatar-div" class="avatar-circle clickable-avatar" onclick="goToProfile()"></div>
             </div>
 
-            <!-- Exercise Options Panel -->
+            <!-- Dashboard Menu Buttons -->
             <div id="exercise-options-panel" class="workout-buttons">
-                <button class="exercise-choice-btn" id="btn-cardio" onclick="openStepTracker()">🏃 Walking & Running Tracker</button>
-                <button class="exercise-choice-btn" id="btn-strength" onclick="openWorkoutRoutine('Strength')">🏋️ Strength Workout</button>
-                <button class="exercise-choice-btn" id="btn-yoga" onclick="openWorkoutRoutine('Yoga')">🧘 Yoga & Flexibility</button>
+                <button class="exercise-choice-btn" onclick="openStepTracker()">🏃 Walking & Running Tracker</button>
+                <button class="exercise-choice-btn" onclick="openWorkoutRoutine('Strength')">🏋️ Strength Workout</button>
+                <button class="exercise-choice-btn" onclick="openWorkoutRoutine('Yoga')">🧘 Yoga & Flexibility</button>
             </div>
 
-            <!-- 🏃 Step Tracker Panel -->
+            <!-- 🏃 Step Tracker Panel (Fixed Tiny Emoji & Styled Round Controls) -->
             <div id="step-tracker-panel" style="display: none; margin-top: 20px; text-align: center;">
                 <div class="day-info-box">
-                    <h2 id="current-day-title">Day 1</h2>
-                    <p id="day-type-text">🎯 Target Goal: 10 Steps</p>
+                    <h2 id="current-day-title">Day 3</h2>
+                    <p>🎯 Target Goal: 10 Steps</p>
                 </div>
-                <div class="workout-animation-container">
+                
+                <!-- Huge Emoji Circle Container -->
+                <div class="workout-animation-container giant-emoji-box">
                     <span id="animation-emoji">🧍</span>
                 </div>
+                
                 <div class="counter-card">
-                    <span class="counter-label">Steps Counted</span>
-                    <h1 id="live-steps" style="cursor: pointer;">0</h1>
-                    <p class="distance-text">🏁 Distance: <strong id="live-distance">0.00</strong> km</p>
+                    <span style="font-size: 14px; opacity: 0.8;">Steps Counted</span>
+                    <h1 id="live-steps" style="font-size: 48px; margin: 5px 0;">0</h1>
+                    <p>🏁 Distance: <strong id="live-distance">0.00</strong> km</p>
                 </div>
-                <div class="button-group">
+                
+                <div class="button-group-vertical">
                     <button id="start-track-btn" class="round-btn btn-start" onclick="toggleStepTracking()">Start Tracking 🟢</button>
-                    <button id="save-day-btn" class="round-btn btn-save" onclick="saveAndNextDay()" style="display: none;">Save Progress 💾</button>
-                    <button class="round-btn btn-back" onclick="closeStepTracker()">Back 🔙</button>
+                    <button id="save-day-btn" class="round-btn btn-save" onclick="saveAndNextDay()" style="display: none; margin-top: 10px;">Save Progress 💾</button>
+                    <button class="round-btn btn-back" onclick="closeStepTracker()" style="margin-top: 10px;">Back 🔙</button>
                 </div>
             </div>
 
-            <!-- 🏋️🧘 Premium 30-Day Workout Exercise Play Panel (As per Screenshots) -->
+            <!-- 🏋️🧘 Workout Routine Play Panel -->
             <div id="workout-routine-panel" style="display: none; margin-top: 20px; text-align: center;">
                 <div class="day-info-box pink-theme-box">
                     <h2 id="routine-day-title">Day 1 - Strength</h2>
                     <p id="routine-day-sub">Exercise 1 of 10</p>
                 </div>
 
-                <!-- Live Exercise Animation Frame -->
-                <div class="workout-animation-container active-workout-frame">
+                <div class="workout-animation-container giant-emoji-box pink-border">
                     <span id="routine-emoji" class="workout-bounce">🏋️</span>
                 </div>
 
                 <div class="exercise-detail-card">
                     <h3 id="routine-exercise-name">Jumping Jacks</h3>
-                    <!-- Big Pink Stopwatch Timer -->
                     <div id="routine-timer-display">00:30</div>
                 </div>
 
-                <!-- Media Action Controls (Play/Pause/Skip) -->
                 <div class="media-controls-group">
-                    <button class="media-circle-btn btn-sec" onclick="navigateExercise(-1)">⏮️ Prev</button>
+                    <button class="media-circle-btn" onclick="navigateExercise(-1)">⏮️</button>
                     <button id="media-play-pause-btn" class="media-main-pink-btn" onclick="toggleRoutineTimer()">PAUSE ⏸️</button>
-                    <button class="media-circle-btn btn-sec" onclick="navigateExercise(1)">Next ⏭️</button>
+                    <button class="media-circle-btn" onclick="navigateExercise(1)">⏭️</button>
                 </div>
 
-                <div style="margin-top: 20px;">
-                    <button class="round-btn btn-back" onclick="closeWorkoutRoutine()" style="width: 100%;">Exit Workout 🔙</button>
-                </div>
+                <button class="round-btn btn-back" onclick="closeWorkoutRoutine()" style="margin-top: 20px;">Exit Workout 🔙</button>
             </div>
 
             <!-- Settings Panel -->
             <div id="settings-panel" style="display: none; margin-top: 20px;">
-                <label style="font-weight: 600; margin-bottom: 12px; display: block;">🔊 Background Track Volume</label>
-                <div class="music-control-row">
-                    <button class="mute-toggle-btn" id="mute-btn" onclick="toggleMute()">🔊</button>
-                    <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5" oninput="adjustVolume(this.value)">
-                </div>
-
-                <div class="rest-control" style="margin-top: 20px;">
-                    <span>⏱️ Rest Timer: <strong id="rest-display">30s</strong></span>
-                    <div style="display: flex; gap: 10px; margin-top: 8px;">
-                        <button class="timer-btn" onclick="changeRestTime(-5)">-5s</button>
-                        <button class="timer-btn" onclick="changeRestTime(5)">+5s</button>
-                    </div>
-                </div>
-
-                <div class="bottom-nav-bar" style="margin-top: 30px;">
-                    <button onclick="toggleTheme()" class="nav-item">🌓 Switch Theme</button>
-                    <button onclick="resetProfile()" class="nav-item">🔄 Reset All</button>
-                </div>
+                <label>🔊 Background Track Volume</label>
+                <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5" oninput="adjustVolume(this.value)" style="margin-top: 10px;">
+                <button class="round-btn btn-back" onclick="toggleTheme()" style="margin-top: 15px;">🌓 Switch Theme</button>
+                <button class="round-btn btn-back" onclick="toggleSettingsPanel()" style="margin-top: 10px;">Close Settings</button>
             </div>
         </div>
     </div>
 
     <!-- Background Music -->
     <audio id="bg-audio" loop>
-        <source src="audio/workout-track.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
     <script type="module" src="logic.js"></script>
