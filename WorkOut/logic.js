@@ -1,4 +1,4 @@
- import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -15,11 +15,13 @@ try {
     app = initializeApp(firebaseConfig);
     db = getFirestore(app);
 } catch (e) {
-    console.log("Firebase setup skipped or generic layout mode active.");
+    console.log("Firebase bypass setup active.");
 }
 
 let restTime = 30;
 let uploadedAvatarData = null;
+let isMuted = false;
+let previousVolume = 0.5;
 
 window.onload = function() {
     loadProfileData();
@@ -61,7 +63,7 @@ async function validateAndSaveProfile() {
     const address = document.getElementById('user-address').value.trim();
 
     if (!name || !age || !email || !phone || !address) {
-        alert("Please fill in all the profile details correctly.");
+        alert("Please fill in all details.");
         return;
     }
 
@@ -75,20 +77,13 @@ async function validateAndSaveProfile() {
     }
 
     const profileData = { name, age, gender, email, phone, address, avatarSrc, avatarType };
-
     localStorage.setItem('localWorkoutProfile', JSON.stringify(profileData));
-
-    if (db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
-        try {
-            await setDoc(doc(db, "users", "workout_profile"), profileData);
-        } catch (error) {
-            console.error("Firebase save skipped, using offline flow.");
-        }
-    }
 
     applyProfileToDashboard(profileData);
     document.getElementById('profile-setup-card').style.display = 'none';
     document.getElementById('exercise-screen').style.display = 'block';
+    
+    // Play Background Sound
     startBackgroundMusic();
 }
 
@@ -96,45 +91,44 @@ function applyProfileToDashboard(data) {
     document.getElementById('view-avatar-div').style.backgroundImage = `url('${data.avatarSrc}')`;
 }
 
-async function loadProfileData() {
-    const localData = localStorage.getItem('localWorkoutProfile');
-    if (localData) {
-        const data = JSON.parse(localData);
-        fillFormFields(data);
-        applyProfileToDashboard(data);
-    }
+function startBackgroundMusic() {
+    const audio = document.getElementById('bg-audio');
+    audio.play().then(() => {
+        console.log("Audio playing perfectly.");
+    }).catch(err => {
+        console.log("Waiting for user interaction to play music.");
+    });
+}
 
-    if (db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
-        try {
-            const docRef = doc(db, "users", "workout_profile");
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                fillFormFields(data);
-                applyProfileToDashboard(data);
-            }
-        } catch (error) {
-            console.log("Offline mode sync active.");
-        }
+function adjustVolume(val) {
+    const audio = document.getElementById('bg-audio');
+    audio.volume = val;
+    if (val > 0) {
+        isMuted = false;
+        document.getElementById('mute-btn').innerText = "🔊";
+        previousVolume = val;
+    } else {
+        isMuted = true;
+        document.getElementById('mute-btn').innerText = "🔇";
     }
 }
 
-function fillFormFields(data) {
-    document.getElementById('user-name').value = data.name || '';
-    document.getElementById('user-age').value = data.age || '';
-    document.getElementById('user-gender').value = data.gender || 'Male';
-    document.getElementById('user-email').value = data.email || '';
-    document.getElementById('user-phone').value = data.phone || '';
-    document.getElementById('user-address').value = data.address || '';
-    
-    if (data.avatarType === 'anime') {
-        document.querySelectorAll('input[name="avatar-type"]')[1].checked = true;
-        document.getElementById('anime-dp-select').value = data.avatarSrc;
-        switchAvatarView();
+function toggleMute() {
+    const audio = document.getElementById('bg-audio');
+    const volumeSlider = document.getElementById('volume');
+    const muteBtn = document.getElementById('mute-btn');
+
+    if (!isMuted) {
+        previousVolume = audio.volume;
+        audio.volume = 0;
+        volumeSlider.value = 0;
+        muteBtn.innerText = "🔇";
+        isMuted = true;
     } else {
-        document.querySelectorAll('input[name="avatar-type"]')[0].checked = true;
-        uploadedAvatarData = data.avatarSrc;
-        switchAvatarView();
+        audio.volume = previousVolume || 0.5;
+        volumeSlider.value = previousVolume || 0.5;
+        muteBtn.innerText = "🔊";
+        isMuted = false;
     }
 }
 
@@ -148,22 +142,11 @@ function selectExerciseCategory(category) {
     if (category === 'Cardio') document.getElementById('btn-cardio').style.borderColor = 'var(--btn-primary)';
     if (category === 'Strength') document.getElementById('btn-strength').style.borderColor = 'var(--btn-primary)';
     if (category === 'Yoga') document.getElementById('btn-yoga').style.borderColor = 'var(--btn-primary)';
-    alert(`${category} Session Initialized! Ready, Set, Go!`);
 }
 
 function changeRestTime(amount) {
     restTime = Math.max(0, restTime + amount);
     document.getElementById('rest-display').innerText = restTime + "s";
-}
-
-function startBackgroundMusic() {
-    const audio = document.getElementById('bg-audio');
-    audio.play().catch(() => {});
-}
-
-function adjustVolume(val) {
-    const audio = document.getElementById('bg-audio');
-    audio.volume = val;
 }
 
 function toggleTheme() {
@@ -172,7 +155,6 @@ function toggleTheme() {
 
 function resetProfile() {
     localStorage.removeItem('localWorkoutProfile');
-    uploadedAvatarData = null;
     document.getElementById('bg-audio').pause();
     document.getElementById('settings-panel').style.display = 'none';
     document.getElementById('exercise-screen').style.display = 'none';
@@ -184,6 +166,21 @@ function goToProfile() {
     document.getElementById('profile-setup-card').style.display = 'block';
 }
 
+async function loadProfileData() {
+    const localData = localStorage.getItem('localWorkoutProfile');
+    if (localData) {
+        const data = JSON.parse(localData);
+        document.getElementById('user-name').value = data.name || '';
+        document.getElementById('user-age').value = data.age || '';
+        document.getElementById('user-gender').value = data.gender || 'Male';
+        document.getElementById('user-email').value = data.email || '';
+        document.getElementById('user-phone').value = data.phone || '';
+        document.getElementById('user-address').value = data.address || '';
+        applyProfileToDashboard(data);
+    }
+}
+
+// Global UI mappings
 window.startApp = startApp;
 window.switchAvatarView = switchAvatarView;
 window.previewUploadedFile = previewUploadedFile;
@@ -192,6 +189,7 @@ window.toggleSettingsPanel = toggleSettingsPanel;
 window.selectExerciseCategory = selectExerciseCategory;
 window.changeRestTime = changeRestTime;
 window.adjustVolume = adjustVolume;
+window.toggleMute = toggleMute;
 window.toggleTheme = toggleTheme;
 window.resetProfile = resetProfile;
 window.goToProfile = goToProfile;
