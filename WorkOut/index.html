@@ -104,11 +104,35 @@
             </div>
 
             <!-- Exercise Options Panel -->
-            <div id="exercise-options-panel" class="workout-buttons">
-                <button class="exercise-choice-btn" id="btn-cardio" onclick="selectExerciseCategory('Cardio')">🏃 Cardio Training</button>
-                <button class="exercise-choice-btn" id="btn-strength" onclick="selectExerciseCategory('Strength')">🏋️ Strength Workout</button>
-                <button class="exercise-choice-btn" id="btn-yoga" onclick="selectExerciseCategory('Yoga')">🧘 Yoga & Flexibility</button>
+             <!-- Exercise Options Panel -->
+        <div id="exercise-options-panel" class="workout-buttons">
+            <!-- Cardio નું નામ બદલીને આપણે ટ્રેકર કરી દીધું 🏃 -->
+            <button class="exercise-choice-btn" id="btn-cardio" onclick="openStepTracker()">🏃 Walking & Running Tracker</button>
+            <button class="exercise-choice-btn" id="btn-strength" onclick="selectExerciseCategory('Strength')">🏋️ Strength Workout</button>
+            <button class="exercise-choice-btn" id="btn-yoga" onclick="selectExerciseCategory('Yoga')">🧘 Yoga & Flexibility</button>
+        </div>
+
+        <!-- 🏃 આ નવો ટ્રેકર પેનલ બરાબર ઉપરના div ની નીચે જ પેસ્ટ કરી દે -->
+        <div id="step-tracker-panel" style="display: none; margin-top: 20px; text-align: center;">
+            <h3 style="margin-bottom: 5px;">👟 Live Step Counter</h3>
+            <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 0;">Keep this tab open in your mobile & start moving!</p>
+            
+            <div style="margin: 15px 0;">
+                <label>🎯 Set Daily Step Goal:</label>
+                <input type="number" id="step-goal" value="5000" style="width: 60%; text-align: center; margin: 5px auto; display: block;">
             </div>
+
+            <div style="background: rgba(46, 204, 113, 0.15); border: 2px dashed #2ecc71; padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <span style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #2ecc71; font-weight: bold;">Steps Counted</span>
+                <h1 id="live-steps" style="font-size: 48px; margin: 5px 0; color: #ffffff;">0</h1>
+                <p style="margin: 5px 0; font-size: 15px;">🏁 Distance: <strong id="live-distance" style="color: #2ecc71;">0.00</strong> km</p>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                <button id="start-track-btn" class="next-btn" onclick="toggleStepTracking()" style="background-color: #2ecc71;">Start Tracking 🟢</button>
+                <button class="nav-item-btn" onclick="closeStepTracker()">Back 🔙</button>
+            </div>
+        </div>
 
             <!-- Settings Only Panel -->
             <div id="settings-panel" style="display: none; margin-top: 20px;">
