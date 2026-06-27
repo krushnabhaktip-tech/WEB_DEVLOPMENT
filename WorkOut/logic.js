@@ -10,14 +10,19 @@ const firebaseConfig = {
     appId: "YOUR_APP_ID"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+let app, db;
+try {
+    app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+} catch (e) {
+    console.log("Firebase setup skipped or generic layout mode active.");
+}
 
 let restTime = 30;
 let uploadedAvatarData = null;
 
 window.onload = function() {
-    loadProfileFromFirebase();
+    loadProfileData();
 };
 
 function startApp() {
@@ -71,48 +76,65 @@ async function validateAndSaveProfile() {
 
     const profileData = { name, age, gender, email, phone, address, avatarSrc, avatarType };
 
-    try {
-        await setDoc(doc(db, "users", "workout_profile"), profileData);
-        applyProfileToDashboard(profileData);
-        document.getElementById('profile-setup-card').style.display = 'none';
-        document.getElementById('exercise-screen').style.display = 'block';
-        startBackgroundMusic();
-    } catch (error) {
-        alert("Error saving profile to Firebase: " + error.message);
+    localStorage.setItem('localWorkoutProfile', JSON.stringify(profileData));
+
+    if (db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+        try {
+            await setDoc(doc(db, "users", "workout_profile"), profileData);
+        } catch (error) {
+            console.error("Firebase save skipped, using offline flow.");
+        }
     }
+
+    applyProfileToDashboard(profileData);
+    document.getElementById('profile-setup-card').style.display = 'none';
+    document.getElementById('exercise-screen').style.display = 'block';
+    startBackgroundMusic();
 }
 
 function applyProfileToDashboard(data) {
     document.getElementById('view-avatar-div').style.backgroundImage = `url('${data.avatarSrc}')`;
 }
 
-async function loadProfileFromFirebase() {
-    try {
-        const docRef = doc(db, "users", "workout_profile");
-        const docSnap = await getDoc(docRef);
+async function loadProfileData() {
+    const localData = localStorage.getItem('localWorkoutProfile');
+    if (localData) {
+        const data = JSON.parse(localData);
+        fillFormFields(data);
+        applyProfileToDashboard(data);
+    }
 
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            document.getElementById('user-name').value = data.name;
-            document.getElementById('user-age').value = data.age;
-            document.getElementById('user-gender').value = data.gender;
-            document.getElementById('user-email').value = data.email;
-            document.getElementById('user-phone').value = data.phone;
-            document.getElementById('user-address').value = data.address;
-            
-            if (data.avatarType === 'anime') {
-                document.querySelectorAll('input[name="avatar-type"]')[1].checked = true;
-                document.getElementById('anime-dp-select').value = data.avatarSrc;
-                switchAvatarView();
-            } else {
-                document.querySelectorAll('input[name="avatar-type"]')[0].checked = true;
-                uploadedAvatarData = data.avatarSrc;
-                switchAvatarView();
+    if (db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+        try {
+            const docRef = doc(db, "users", "workout_profile");
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                fillFormFields(data);
+                applyProfileToDashboard(data);
             }
-            applyProfileToDashboard(data);
+        } catch (error) {
+            console.log("Offline mode sync active.");
         }
-    } catch (error) {
-        console.error("Error loading data from Firebase: ", error);
+    }
+}
+
+function fillFormFields(data) {
+    document.getElementById('user-name').value = data.name || '';
+    document.getElementById('user-age').value = data.age || '';
+    document.getElementById('user-gender').value = data.gender || 'Male';
+    document.getElementById('user-email').value = data.email || '';
+    document.getElementById('user-phone').value = data.phone || '';
+    document.getElementById('user-address').value = data.address || '';
+    
+    if (data.avatarType === 'anime') {
+        document.querySelectorAll('input[name="avatar-type"]')[1].checked = true;
+        document.getElementById('anime-dp-select').value = data.avatarSrc;
+        switchAvatarView();
+    } else {
+        document.querySelectorAll('input[name="avatar-type"]')[0].checked = true;
+        uploadedAvatarData = data.avatarSrc;
+        switchAvatarView();
     }
 }
 
@@ -149,6 +171,7 @@ function toggleTheme() {
 }
 
 function resetProfile() {
+    localStorage.removeItem('localWorkoutProfile');
     uploadedAvatarData = null;
     document.getElementById('bg-audio').pause();
     document.getElementById('settings-panel').style.display = 'none';

@@ -1,17 +1,17 @@
  :root {
     --bg-main: #121212;
-    --card-bg: rgba(30, 30, 30, 0.75);
+    --card-bg: rgba(20, 20, 20, 0.65);
     --text-main: #ffffff;
     --btn-primary: #2ecc71;
     --btn-hover: #27ae60;
-    --input-bg: rgba(255, 255, 255, 0.08);
-    --border-color: rgba(255, 255, 255, 0.15);
-    --box-shadow-color: rgba(0, 0, 0, 0.5);
+    --input-bg: rgba(255, 255, 255, 0.1);
+    --border-color: rgba(255, 255, 255, 0.2);
+    --box-shadow-color: rgba(0, 0, 0, 0.6);
 }
 
 .light-mode {
     --bg-main: #eef2f3;
-    --card-bg: rgba(255, 255, 255, 0.85);
+    --card-bg: rgba(255, 255, 255, 0.8);
     --text-main: #2c3e50;
     --btn-primary: #2ecc71;
     --btn-hover: #1abc9c;
@@ -21,7 +21,7 @@
 }
 
 body {
-    background-image: url('yoga.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('yoga.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -49,9 +49,9 @@ body {
     padding: 35px;
     border-radius: 24px;
     box-shadow: 0 12px 40px 0 var(--box-shadow-color);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     transition: transform 0.3s ease, background 0.3s ease;
 }
 
