@@ -140,7 +140,7 @@ window.selectExerciseCategory = function(category) {
 };
 
 window.switchTab = function(tabName) {
-    console.log(`Tab event: ${tabName}`);
+   console.log(`Tab event: ${tabName}`);
 };
 
 window.enableProfileEditing = function() {
