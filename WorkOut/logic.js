@@ -1,1 +1,139 @@
- 
+ let restTime = 30;
+let uploadedAvatarData = null;
+
+window.onload = function() {
+    loadProfileFromStorage();
+};
+
+function startApp() {
+    document.getElementById('welcome-screen').style.display = 'none';
+    document.getElementById('profile-setup-card').style.display = 'block';
+}
+
+function switchAvatarView() {
+    const avatarType = document.querySelector('input[name="avatar-type"]:checked').value;
+    if (avatarType === 'upload') {
+        document.getElementById('avatar-input-container').style.display = 'block';
+        document.getElementById('anime-select-container').style.display = 'none';
+    } else {
+        document.getElementById('avatar-input-container').style.display = 'none';
+        document.getElementById('anime-select-container').style.display = 'block';
+    }
+}
+
+function previewUploadedFile(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            uploadedAvatarData = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function validateAndSaveProfile() {
+    const name = document.getElementById('user-name').value.trim();
+    const age = document.getElementById('user-age').value.trim();
+    const gender = document.getElementById('user-gender').value;
+    const email = document.getElementById('user-email').value.trim();
+    const phone = document.getElementById('user-phone').value.trim();
+    const address = document.getElementById('user-address').value.trim();
+
+    if (!name || !age || !email || !phone || !address) {
+        alert("Please fill in all the profile details correctly.");
+        return;
+    }
+
+    const avatarType = document.querySelector('input[name="avatar-type"]:checked').value;
+    let avatarSrc = "";
+
+    if (avatarType === 'anime') {
+        avatarSrc = document.getElementById('anime-dp-select').value;
+    } else {
+        avatarSrc = uploadedAvatarData || "images/naruto.png";
+    }
+
+    const profileData = { name, age, gender, email, phone, address, avatarSrc, avatarType };
+    localStorage.setItem('userWorkoutProfile', JSON.stringify(profileData));
+
+    applyProfileToDashboard(profileData);
+
+    document.getElementById('profile-setup-card').style.display = 'none';
+    document.getElementById('exercise-screen').style.display = 'block';
+
+    startBackgroundMusic();
+}
+
+function applyProfileToDashboard(data) {
+    document.getElementById('view-avatar-div').style.backgroundImage = `url('${data.avatarSrc}')`;
+}
+
+function loadProfileFromStorage() {
+    const savedData = localStorage.getItem('userWorkoutProfile');
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        document.getElementById('user-name').value = data.name;
+        document.getElementById('user-age').value = data.age;
+        document.getElementById('user-gender').value = data.gender;
+        document.getElementById('user-email').value = data.email;
+        document.getElementById('user-phone').value = data.phone;
+        document.getElementById('user-address').value = data.address;
+        
+        if (data.avatarType === 'anime') {
+            document.querySelectorAll('input[name="avatar-type"]')[1].checked = true;
+            document.getElementById('anime-dp-select').value = data.avatarSrc;
+            switchAvatarView();
+        } else {
+            document.querySelectorAll('input[name="avatar-type"]')[0].checked = true;
+            uploadedAvatarData = data.avatarSrc;
+            switchAvatarView();
+        }
+    }
+}
+
+function toggleSettingsPanel() {
+    const panel = document.getElementById('settings-panel');
+    panel.style.display = (panel.style.display === 'none' || panel.style.display === '') ? 'block' : 'none';
+}
+
+function selectExerciseCategory(category) {
+    document.querySelectorAll('.exercise-choice-btn').forEach(btn => btn.style.borderColor = 'var(--border-color)');
+    if (category === 'Cardio') document.getElementById('btn-cardio').style.borderColor = 'var(--btn-primary)';
+    if (category === 'Strength') document.getElementById('btn-strength').style.borderColor = 'var(--btn-primary)';
+    if (category === 'Yoga') document.getElementById('btn-yoga').style.borderColor = 'var(--btn-primary)';
+    alert(`${category} Session Initialized! Ready, Set, Go!`);
+}
+
+function changeRestTime(amount) {
+    restTime = Math.max(0, restTime + amount);
+    document.getElementById('rest-display').innerText = restTime + "s";
+}
+
+function startBackgroundMusic() {
+    const audio = document.getElementById('bg-audio');
+    audio.play().catch(() => {});
+}
+
+function adjustVolume(val) {
+    const audio = document.getElementById('bg-audio');
+    audio.volume = val;
+}
+
+function toggleTheme() {
+    document.body.classList.toggle('light-mode');
+}
+
+function resetProfile() {
+    localStorage.removeItem('userWorkoutProfile');
+    uploadedAvatarData = null;
+    document.getElementById('bg-audio').pause();
+    document.getElementById('settings-panel').style.display = 'none';
+    document.getElementById('exercise-screen').style.display = 'none';
+    document.getElementById('welcome-screen').style.display = 'block';
+}
+
+function goToProfile() {
+    document.getElementById('exercise-screen').style.display = 'none';
+    document.getElementById('profile-setup-card').style.display = 'block';
+}
