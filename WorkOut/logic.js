@@ -32,7 +32,6 @@ function startApp() {
     document.getElementById('welcome-screen').style.display = 'none';
     document.getElementById('profile-setup-card').style.display = 'block';
 }
-
 function switchAvatarView() {
     const avatarType = document.querySelector('input[name="avatar-type"]:checked').value;
     if (avatarType === 'upload') {
@@ -40,7 +39,7 @@ function switchAvatarView() {
         document.getElementById('anime-select-container').style.display = 'none';
     } else {
         document.getElementById('avatar-input-container').style.display = 'none';
-        document.getElementById('anime-select-container').style.block = 'block';
+        document.getElementById('anime-select-container').style.display = 'block'; // અહીં મેં 'style.block' લખી દીધું હતું, હવે ફિક્સ થઈ ગયું!
     }
 }
 
