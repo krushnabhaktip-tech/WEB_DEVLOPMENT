@@ -263,3 +263,58 @@ function closeWorkoutRoutine() {
 function toggleTheme() {
     document.body.classList.toggle('light-mode');
 }
+
+function toggleStepTracking() {
+    isTracking = !isTracking;
+    const btn = document.getElementById('start-track-btn');
+    
+    if (isTracking) {
+        btn.innerText = "Tracking... 🔴";
+        btn.style.background = "linear-gradient(135deg, #e74c3c, #c0392b)";
+        
+        // 1. Phone check: Agar phone ka shake sensor (DeviceMotion) available hai
+        if (window.DeviceMotionEvent && typeof window.DeviceMotionEvent.requestPermission === 'function') {
+            window.DeviceMotionEvent.requestPermission().catch(err => console.log(err));
+        }
+
+        let lastX, lastY, lastZ;
+        window.ondevicemotion = function(event) {
+            if (!isTracking) return;
+            let acceleration = event.accelerationIncludingGravity;
+            if (!acceleration.x) return; // Laptop par ye khali rahega
+
+            let change = Math.abs(acceleration.x - lastX) + Math.abs(acceleration.y - lastY) + Math.abs(acceleration.z - lastZ);
+            if (change > 12) { // Chalne par shake detect hoga
+                stepCount++;
+                updateStepUI();
+            }
+            lastX = acceleration.x;
+            lastY = acceleration.y;
+            lastZ = acceleration.z;
+        };
+
+        // 2. Laptop/Fallback check: Agar data sensor nahi hai, to auto 1 second me badhega (10 sec test ke liye)
+        trackInterval = setInterval(() => {
+            // Agar browser phone ka motion support nahi kar raha (yani laptop hai)
+            if (!window.DeviceMotionEvent || navigator.userAgent.match(/Mobi/i) === null) {
+                stepCount++;
+                updateStepUI();
+            }
+        }, 1000);
+
+    } else {
+        btn.innerText = "Start Tracking 🟢";
+        btn.style.background = "linear-gradient(135deg, #2ecc71, #27ae60)";
+        clearInterval(trackInterval);
+        window.ondevicemotion = null;
+    }
+}
+
+// UI update karne ke liye chota helper function
+function updateStepUI() {
+    document.getElementById('live-steps').innerText = stepCount;
+    document.getElementById('live-distance').innerText = (stepCount * 0.0007).toFixed(2);
+    if (stepCount >= 10) {
+        document.getElementById('save-day-btn').style.display = 'block';
+    }
+}
