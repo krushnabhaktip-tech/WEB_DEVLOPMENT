@@ -179,4 +179,4 @@ window.toggleTheme = function() {
 
 window.resetProfile = function() {
     location.reload();
-};
+}
