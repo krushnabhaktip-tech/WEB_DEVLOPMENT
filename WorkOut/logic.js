@@ -221,3 +221,95 @@ window.toggleTheme = toggleTheme;
 window.resetProfile = resetProfile;
 window.goToProfile = goToProfile;
 window.backToDashboard = backToDashboard;
+
+// 🏃 લાઈવ સ્ટેપ કાઉન્ટર લોજિક (ફાઈલની છેલ્લે ઉમેરવો)
+let stepCount = 0;
+let isTracking = false;
+let lastAcceleration = { x: null, y: null, z: null };
+let shakeThreshold = 12; 
+
+function openStepTracker() {
+    document.getElementById('exercise-options-panel').style.display = 'none';
+    document.getElementById('settings-panel').style.display = 'none';
+    document.getElementById('step-tracker-panel').style.display = 'block';
+    document.getElementById('dashboard-title').innerText = "Running Tracker 🏁";
+}
+
+function closeStepTracker() {
+    stopStepTracking();
+    document.getElementById('step-tracker-panel').style.display = 'none';
+    document.getElementById('exercise-options-panel').style.display = 'flex';
+    document.getElementById('dashboard-title').innerText = "Exercise Dashboard";
+}
+
+function toggleStepTracking() {
+    const btn = document.getElementById('start-track-btn');
+    if (!isTracking) {
+        startStepTracking();
+        btn.innerText = "Stop Tracking 🛑";
+        btn.style.backgroundColor = "#e74c3c";
+    } else {
+        stopStepTracking();
+        btn.innerText = "Start Tracking 🟢";
+        btn.style.backgroundColor = "#2ecc71";
+    }
+}
+
+function startStepTracking() {
+    isTracking = true;
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+        DeviceMotionEvent.requestPermission()
+            .then(permissionState => {
+                if (permissionState === 'granted') {
+                    window.addEventListener('devicemotion', handleMotion, true);
+                } else {
+                    alert("Permission denied! Clicking on the big step number will also count steps.");
+                }
+            }).catch(console.error);
+    } else {
+        window.addEventListener('devicemotion', handleMotion, true);
+    }
+
+    // લેપટોપમાં ટેસ્ટ કરવા માટે નંબર પર ક્લિક કરશો તો પણ સ્ટેપ વધશે
+    document.getElementById('live-steps').onclick = function() {
+        if(isTracking) countOneStep();
+    };
+}
+
+function stopStepTracking() {
+    isTracking = false;
+    window.removeEventListener('devicemotion', handleMotion, true);
+}
+
+function handleMotion(event) {
+    let acc = event.accelerationIncludingGravity;
+    if (!acc.x || !acc.y || !acc.z) return;
+
+    if (lastAcceleration.x !== null) {
+        let deltaX = Math.abs(lastAcceleration.x - acc.x);
+        let deltaY = Math.abs(lastAcceleration.y - acc.y);
+        let deltaZ = Math.abs(lastAcceleration.z - acc.z);
+
+        if ((deltaX > shakeThreshold && deltaY > shakeThreshold) || (deltaY > shakeThreshold && deltaZ > shakeThreshold)) {
+            countOneStep();
+        }
+    }
+    lastAcceleration = { x: acc.x, y: acc.y, z: acc.z };
+}
+
+function countOneStep() {
+    stepCount++;
+    document.getElementById('live-steps').innerText = stepCount;
+    let distance = stepCount * 0.00075;
+    document.getElementById('live-distance').innerText = distance.toFixed(2);
+
+    let goal = parseInt(document.getElementById('step-goal').value) || 5000;
+    if (stepCount === goal) {
+        alert("🎉 Congratulations! You reached your goal! 🥳🏆");
+    }
+}
+
+// આ લાઈનો ખાસ જરૂરી છે જેથી HTML બટન આ ફંક્શનને શોધી શકે
+window.openStepTracker = openStepTracker;
+window.closeStepTracker = closeStepTracker;
+window.toggleStepTracking = toggleStepTracking;
