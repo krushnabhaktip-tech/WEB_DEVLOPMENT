@@ -21,7 +21,7 @@
 }
 
 body {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('yoga.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('yoga.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -53,17 +53,23 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
+/* Welcome Card Layout */
+.welcome-card {
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.welcome-spacer {
+    flex-grow: 1;
+}
+
 h2 {
     margin-top: 0;
     font-size: 28px;
     font-weight: 700;
     margin-bottom: 15px;
-}
-
-p {
-    font-size: 15px;
-    opacity: 0.85;
-    margin-bottom: 25px;
 }
 
 .form-grid {
@@ -104,10 +110,18 @@ input, select {
     cursor: pointer;
     font-weight: 600;
     width: 100%;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+    transition: background 0.2s, transform 0.1s;
 }
 
 .next-btn:hover {
     background-color: var(--btn-hover);
+}
+
+.start-btn {
+    padding: 16px;
+    font-size: 18px;
+    border-radius: 16px;
 }
 
 .workout-buttons {
@@ -127,10 +141,12 @@ input, select {
     font-weight: 600;
     cursor: pointer;
     text-align: left;
+    transition: transform 0.2s, border-color 0.2s;
 }
 
 .exercise-choice-btn:hover {
     border-color: var(--btn-primary);
+    transform: scale(1.01);
 }
 
 .dashboard-header {
@@ -161,7 +177,7 @@ input, select {
     border: 3px solid var(--btn-primary);
 }
 
-/* --- Round Shape Volume Bar & Controls --- */
+/* Round Shape Volume Bar Layout */
 .music-control-row {
     display: flex;
     align-items: center;
@@ -184,7 +200,6 @@ input, select {
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
 }
 
 input[type="range"] {
@@ -203,7 +218,6 @@ input[type="range"]::-webkit-slider-thumb {
     border-radius: 50%;
     background: var(--btn-primary);
     cursor: pointer;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
 }
 
 .timer-btn {
@@ -220,7 +234,7 @@ input[type="range"]::-webkit-slider-thumb {
     display: flex;
     justify-content: space-around;
     border-top: 1px solid var(--border-color);
-    padding-top: 15px;
+    padding-top: 20px;
 }
 
 .nav-item {
@@ -230,4 +244,6 @@ input[type="range"]::-webkit-slider-thumb {
     cursor: pointer;
     font-size: 15px;
 }
-
+.nav-item:hover {
+    color: var(--btn-primary);
+}

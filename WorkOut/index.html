@@ -10,10 +10,10 @@
 
     <div id="app-box">
         <!-- Welcome Screen -->
-        <div id="welcome-screen" class="profile-card">
+        <div id="welcome-screen" class="profile-card welcome-card">
             <h2>Welcome to Workout Hub</h2>
-            <p>Set up your profile and manage your daily routines perfectly.</p>
-            <button class="next-btn" onclick="startApp()">Get Started 🚀</button>
+            <div class="welcome-spacer"></div>
+            <button class="next-btn start-btn" onclick="startApp()">Start 🚀</button>
         </div>
 
         <!-- Profile Setup Card -->
@@ -84,28 +84,33 @@
         <!-- Exercise Dashboard Screen -->
         <div id="exercise-screen" class="profile-card" style="display: none;">
             <div class="dashboard-header">
-                <h2>Exercise Dashboard</h2>
+                <h2 id="dashboard-title">Exercise Dashboard</h2>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <button class="settings-circle-btn" onclick="toggleSettingsPanel()">⚙️</button>
+                    <button class="settings-circle-btn" id="settings-toggle-icon" onclick="toggleSettingsPanel()">⚙️</button>
                     <div id="view-avatar-div" class="avatar-circle"></div>
                 </div>
             </div>
 
-            <div class="workout-buttons">
+            <!-- Exercise Options Panel -->
+            <div id="exercise-options-panel" class="workout-buttons">
                 <button class="exercise-choice-btn" id="btn-cardio" onclick="selectExerciseCategory('Cardio')">🏃 Cardio Training</button>
                 <button class="exercise-choice-btn" id="btn-strength" onclick="selectExerciseCategory('Strength')">🏋️ Strength Workout</button>
                 <button class="exercise-choice-btn" id="btn-yoga" onclick="selectExerciseCategory('Yoga')">🧘 Yoga & Flexibility</button>
+                
+                <div style="margin-top: 20px; display: flex; justify-content: center;">
+                    <button onclick="goToProfile()" class="nav-item">👤 Profile</button>
+                </div>
             </div>
 
-            <!-- Settings Panel -->
-            <div id="settings-panel" style="display: none; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                <label style="font-weight: 600; margin-bottom: 10px; display: block;">Background Track Volume</label>
+            <!-- Settings Only Panel -->
+            <div id="settings-panel" style="display: none; margin-top: 20px;">
+                <label style="font-weight: 600; margin-bottom: 12px; display: block;">Background Track Volume</label>
                 <div class="music-control-row">
                     <button class="mute-toggle-btn" id="mute-btn" onclick="toggleMute()">🔊</button>
                     <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5" oninput="adjustVolume(this.value)">
                 </div>
 
-                <div class="rest-control" style="margin-top: 18px;">
+                <div class="rest-control" style="margin-top: 20px;">
                     <span>Rest Timer: <strong id="rest-display">30s</strong></span>
                     <div style="display: flex; gap: 10px; margin-top: 8px;">
                         <button class="timer-btn" onclick="changeRestTime(-5)">-5s</button>
@@ -113,14 +118,10 @@
                     </div>
                 </div>
 
-                <div class="bottom-nav-bar" style="margin-top: 25px;">
+                <div class="bottom-nav-bar" style="margin-top: 30px;">
                     <button onclick="toggleTheme()" class="nav-item">☀️ Light / 🌙 Dark</button>
-                    <button onclick="resetProfile()" class="nav-item">🔄 Reset</button>
+                    <button onclick="resetProfile()" class="nav-item">🔄 Reset Dashboard</button>
                 </div>
-            </div>
-
-            <div style="margin-top: 30px; display: flex; justify-content: center;">
-                <button onclick="goToProfile()" class="nav-item">👤 Profile</button>
             </div>
         </div>
     </div>

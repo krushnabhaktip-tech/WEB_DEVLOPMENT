@@ -15,13 +15,14 @@ try {
     app = initializeApp(firebaseConfig);
     db = getFirestore(app);
 } catch (e) {
-    console.log("Firebase bypass setup active.");
+    console.log("Offline UI view activated.");
 }
 
 let restTime = 30;
 let uploadedAvatarData = null;
 let isMuted = false;
 let previousVolume = 0.5;
+let isSettingsMode = false;
 
 window.onload = function() {
     loadProfileData();
@@ -39,7 +40,7 @@ function switchAvatarView() {
         document.getElementById('anime-select-container').style.display = 'none';
     } else {
         document.getElementById('avatar-input-container').style.display = 'none';
-        document.getElementById('anime-select-container').style.display = 'block';
+        document.getElementById('anime-select-container').style.block = 'block';
     }
 }
 
@@ -63,7 +64,7 @@ async function validateAndSaveProfile() {
     const address = document.getElementById('user-address').value.trim();
 
     if (!name || !age || !email || !phone || !address) {
-        alert("Please fill in all details.");
+        alert("Please complete the profile forms setup.");
         return;
     }
 
@@ -83,7 +84,6 @@ async function validateAndSaveProfile() {
     document.getElementById('profile-setup-card').style.display = 'none';
     document.getElementById('exercise-screen').style.display = 'block';
     
-    // Play Background Sound
     startBackgroundMusic();
 }
 
@@ -93,11 +93,7 @@ function applyProfileToDashboard(data) {
 
 function startBackgroundMusic() {
     const audio = document.getElementById('bg-audio');
-    audio.play().then(() => {
-        console.log("Audio playing perfectly.");
-    }).catch(err => {
-        console.log("Waiting for user interaction to play music.");
-    });
+    audio.play().catch(() => {});
 }
 
 function adjustVolume(val) {
@@ -132,9 +128,23 @@ function toggleMute() {
     }
 }
 
+/* Toggle settings panel only mode */
 function toggleSettingsPanel() {
-    const panel = document.getElementById('settings-panel');
-    panel.style.display = (panel.style.display === 'none' || panel.style.display === '') ? 'block' : 'none';
+    const exercisePanel = document.getElementById('exercise-options-panel');
+    const settingsPanel = document.getElementById('settings-panel');
+    const titleText = document.getElementById('dashboard-title');
+
+    if (!isSettingsMode) {
+        exercisePanel.style.display = 'none';
+        settingsPanel.style.display = 'block';
+        titleText.innerText = "Settings Configuration";
+        isSettingsMode = true;
+    } else {
+        settingsPanel.style.display = 'none';
+        exercisePanel.style.display = 'flex';
+        titleText.innerText = "Exercise Dashboard";
+        isSettingsMode = false;
+    }
 }
 
 function selectExerciseCategory(category) {
@@ -155,10 +165,13 @@ function toggleTheme() {
 
 function resetProfile() {
     localStorage.removeItem('localWorkoutProfile');
+    isSettingsMode = false;
     document.getElementById('bg-audio').pause();
     document.getElementById('settings-panel').style.display = 'none';
+    document.getElementById('exercise-options-panel').style.display = 'flex';
+    document.getElementById('dashboard-title').innerText = "Exercise Dashboard";
     document.getElementById('exercise-screen').style.display = 'none';
-    document.getElementById('welcome-screen').style.display = 'block';
+    document.getElementById('welcome-screen').style.display = 'flex';
 }
 
 function goToProfile() {
@@ -180,7 +193,7 @@ async function loadProfileData() {
     }
 }
 
-// Global UI mappings
+// Global mapping scope setup
 window.startApp = startApp;
 window.switchAvatarView = switchAvatarView;
 window.previewUploadedFile = previewUploadedFile;
