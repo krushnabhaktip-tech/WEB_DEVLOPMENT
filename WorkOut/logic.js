@@ -313,3 +313,108 @@ function countOneStep() {
 window.openStepTracker = openStepTracker;
 window.closeStepTracker = closeStepTracker;
 window.toggleStepTracking = toggleStepTracking;
+
+let stepCount = 0;
+let isTracking = false;
+let lastAcceleration = { x: null, y: null, z: null };
+let shakeThreshold = 7; // આપણે સેન્સિટિવિટી થોડી વધારી દીધી (7 કરી દીધી) જેથી હળવા ઝટકા પણ પકડાય
+
+function openStepTracker() {
+    document.getElementById('exercise-options-panel').style.display = 'none';
+    document.getElementById('settings-panel').style.display = 'none';
+    document.getElementById('step-tracker-panel').style.display = 'block';
+    document.getElementById('dashboard-title').innerText = "Running Tracker 🏁";
+}
+
+function closeStepTracker() {
+    stopStepTracking();
+    document.getElementById('step-tracker-panel').style.display = 'none';
+    document.getElementById('exercise-options-panel').style.display = 'flex';
+    document.getElementById('dashboard-title').innerText = "Exercise Dashboard";
+}
+
+function toggleStepTracking() {
+    const btn = document.getElementById('start-track-btn');
+    if (!isTracking) {
+        startStepTracking();
+        btn.innerText = "Stop Tracking 🛑";
+        btn.style.backgroundColor = "#e74c3c";
+    } else {
+        stopStepTracking();
+        btn.innerText = "Start Tracking 🟢";
+        btn.style.backgroundColor = "#2ecc71";
+    }
+}
+
+function startStepTracking() {
+    isTracking = true;
+    
+    // આ બંને ઇવેન્ટ્સ (devicemotion અને deviceorientation) એડ કરી દઈએ જેથી એન્ડ્રોઇડ ૧૦૦% સેન્સર ડેટા આપે
+    if (window.DeviceMotionEvent) {
+        window.addEventListener('devicemotion', handleMotion);
+    }
+    if (window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', handleOrientation);
+    }
+
+    // લેપટોપ કે મેન્યુઅલ ટેસ્ટિંગ માટે ટૅપ ઓપ્શન
+    document.getElementById('live-steps').onclick = function() {
+        if(isTracking) countOneStep();
+    };
+}
+
+function stopStepTracking() {
+    isTracking = false;
+    window.removeEventListener('devicemotion', handleMotion);
+    window.removeEventListener('deviceorientation', handleOrientation);
+}
+
+// એન્ડ્રોઇડ ક્રોમ માટે વધારે સેન્સિટિવ મોશન હેન્ડલર
+function handleMotion(event) {
+    if (!isTracking) return;
+
+    // અહિયાં આપણે acceleration અથવા accelerationIncludingGravity બંનેમાંથી જે મળે તે ડેટા લઈશું
+    let acc = event.acceleration || event.accelerationIncludingGravity;
+    if (!acc || acc.x === null || acc.y === null || acc.z === null) return;
+
+    if (lastAcceleration.x !== null) {
+        let deltaX = Math.abs(lastAcceleration.x - acc.x);
+        let deltaY = Math.abs(lastAcceleration.y - acc.y);
+        let deltaZ = Math.abs(lastAcceleration.z - acc.z);
+
+        // જો કોઈપણ બે ડાયરેક્શનમાં મુવમેન્ટ થ્રેશોલ્ડ કરતા વધુ હોય તો સ્ટેપ ગણો
+        if ((deltaX > shakeThreshold && deltaY > shakeThreshold) || 
+            (deltaY > shakeThreshold && deltaZ > shakeThreshold) ||
+            (deltaX > shakeThreshold && deltaZ > shakeThreshold)) {
+            countOneStep();
+        }
+    }
+    lastAcceleration = { x: acc.x, y: acc.y, z: acc.z };
+}
+
+// બેકઅપ હેન્ડલર: જો મોશન કામ ન કરે તો ફોન રોટેટ (ટિલ્ટ) થાય ત્યારે પણ આ પકડી લેશે
+function handleOrientation(event) {
+    if (!isTracking) return;
+    // હળવા રોટેશન ફેરફારથી પણ સ્ટેપ સિમ્યુલેટ થશે
+    let totalRotation = Math.abs(event.alpha || 0) + Math.abs(event.beta || 0) + Math.abs(event.gamma || 0);
+    if (totalRotation % 15 === 0) { // દર ૧૫ ડિગ્રીના ચેન્જ પર (વર્કઅરાઉન્ડ)
+        // countOneStep(); // આ લાઈન કમેન્ટ રાખી છે, જો જરૂર પડે તો જ ખોલવી
+    }
+}
+
+function countOneStep() {
+    stepCount++;
+    document.getElementById('live-steps').innerText = stepCount;
+    let distance = stepCount * 0.00075;
+    document.getElementById('live-distance').innerText = distance.toFixed(2);
+
+    let goal = parseInt(document.getElementById('step-goal').value) || 5000;
+    if (stepCount === goal) {
+        alert("🎉 Congratulations! You reached your goal! 🥳🏆");
+    }
+}
+
+// ગ્લોબલ વિન્ડો બાઈન્ડિંગ્સ
+window.openStepTracker = openStepTracker;
+window.closeStepTracker = closeStepTracker;
+window.toggleStepTracking = toggleStepTracking;
