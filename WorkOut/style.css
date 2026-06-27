@@ -273,3 +273,9 @@ input[type="range"]::-webkit-slider-thumb {
 .nav-item:hover {
     color: var(--btn-primary);
 }
+
+select option {
+    background-color: #1e1b4b;
+    color: #ffffff;
+    padding: 10px;
+}
