@@ -3,146 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Mini Games & Workout Hub</title>
+    <title>Workout Hub</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="dark-mode">
 
-    <div class="app-box">
-        <!-- 1. START SCREEN -->
-        <div id="start-screen" style="display: block; text-align: center; padding: 40px 20px;">
-            <h1 style="margin-bottom: 20px; color: var(--text-main);">Welcome to Workout Hub</h1>
-            <p style="color: var(--text-muted); margin-bottom: 30px;">Set up your profile and manage your daily routines perfectly.</p>
-            <button id="start-workout-btn" class="next-btn" onclick="startworkout()">Get Started 🚀</button>
+    <div id="app-box">
+        <!-- 1. WELCOME SCREEN -->
+        <div id="welcome-screen" class="profile-card">
+            <h2>Welcome to Workout Hub</h2>
+            <p>Set up your profile and manage your daily routines perfectly.</p>
+            <button class="next-btn" onclick="startApp()">Get Started 🚀</button>
         </div>
 
-        <!-- 2. MAIN WORKOUT CONTENT / PROFILE SETUP -->
-        <div id="main-workout-content" style="display: none;">
+        <!-- 2. CREATE PROFILE CARD -->
+        <div id="profile-setup-card" class="profile-card" style="display: none;">
+            <h2>Create Profile</h2>
             
-            <!-- PROFILE SETUP CARD -->
-            <div id="profile-setup-card" class="profile-card">
-                <h1 style="color: var(--text-main); margin-bottom: 20px;">Create Profile</h1>
-                
-                <div class="form-grid">
-                    <div class="input-group">
-                        <label style="color: var(--text-main);">Username</label>
-                        <input type="text" id="username" placeholder="Enter username" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main);">
-                    </div>
-                    <div class="input-group">
-                        <label style="color: var(--text-main);">Age</label>
-                        <input type="number" id="user-age" placeholder="Enter age" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main);">
-                    </div>
-                    <div class="input-group">
-                        <label style="color: var(--text-main);">Gender</label>
-                        <select id="user-gender" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main);">
-                            <option value="">Select Gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label style="color: var(--text-main);">Email</label>
-                        <input type="email" id="user-email" placeholder="Enter email" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main);">
-                    </div>
-                    <div class="input-group">
-                        <label style="color: var(--text-main);">Password</label>
-                        <input type="password" id="user-password" placeholder="Min 6 characters" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main);">
-                    </div>
-                    <div class="input-group">
-                        <label style="color: var(--text-main);">Phone Number</label>
-                        <input type="tel" id="user-phone" placeholder="Enter phone" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main);">
-                    </div>
-                    <div class="input-group" style="grid-column: span 1;">
-                        <label style="color: var(--text-main);">Address</label>
-                        <input type="text" id="user-address" placeholder="Enter address" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main);">
-                    </div>
+            <div class="form-grid">
+                <div>
+                    <label>Username</label>
+                    <input type="text" id="user-name" placeholder="Enter username">
                 </div>
-
-                <!-- AVATAR SELECTION SECTION -->
-                <div class="avatar-section">
-                    <label style="color: var(--text-main); font-weight: 600;">Choose Profile Display Mode:</label>
-                    <div class="avatar-options">
-                        <label><input type="radio" name="avatar-type" value="upload" checked onchange="switchAvatarView()"> Upload Photo</label>
-                        <label><input type="radio" name="avatar-type" value="anime" onchange="switchAvatarView()"> Anime Character</label>
-                    </div>
-
-                    <!-- File Upload Input Box -->
-                    <div id="avatar-input-container" style="margin-top: 10px; display: block;">
-                        <input type="file" id="user-avatar" accept="image/*" style="color: var(--text-main);">
-                    </div>
-
-                    <!-- Anime Characters Dropdown Setup WITH REAL FACE PATHS -->
-                    <div id="anime-select-container" style="margin-top: 10px; display: none;">
-                        <select id="anime-dp-select" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main);">
-                            <option value="images/naruto.png">🦊 Naruto Uzumaki (Naruto)</option>
-                            <option value="images/tanjiro.png">⚔️ Tanjiro Kamado (Demon Slayer)</option>
-                            <option value="images/kakashi.png">🕊️ Eren Yeager (Attack on Titan)</option>
-                            <option value="images/gojo.png">👁️ Satoru Gojo (Jujutsu Kaisen)</option>
-                            <option value="images/narutof.png">📓 Light Yagami (Death Note)</option>
-                            <option value="images/marin.png">✨ Marin Kitagawa (My Dress-Up Darling)</option>
-                        </select>
-                    </div>
+                <div>
+                    <label>Age</label>
+                    <input type="number" id="user-age" placeholder="Enter age">
                 </div>
-
-                <div style="margin-top: 20px;">
-                    <button class="next-btn full-width-btn" onclick="validateAndSaveProfile()">Save Profile & Continue ➡️</button>
+                <div>
+                    <label>Gender</label>
+                    <select id="user-gender">
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Email</label>
+                    <input type="email" id="user-email" placeholder="Enter email">
+                </div>
+                <div>
+                    <label>Password</label>
+                    <input type="password" id="user-password" placeholder="••••••">
+                </div>
+                <div>
+                    <label>Phone Number</label>
+                    <input type="text" id="user-phone" placeholder="Enter phone">
                 </div>
             </div>
 
-            <!-- EXERCISE SCREEN (Hidden Initially) -->
-            <div id="exercise-screen" class="exercise-selection-card" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h1 style="color: var(--text-main);">Exercise Dashboard</h1>
-                    <div id="view-avatar-div"></div>
-                </div>
+            <div style="margin-top: 15px;">
+                <label>Address</label>
+                <input type="text" id="user-address" placeholder="Enter address" style="width: 100%;">
+            </div>
 
-                <!-- Profile Info Dropdown Simulation Card -->
-                <div id="user-info-menu" class="info-dropdown info-dropdown-hidden" style="background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 15px; color: var(--text-main);">
-                    <p><strong>Name:</strong> <span id="view-name"></span></p>
-                    <p><strong>Age:</strong> <span id="view-age"></span></p>
-                    <p><strong>Gender:</strong> <span id="view-gender"></span></p>
-                    <p><strong>Email:</strong> <span id="view-email"></span></p>
-                    <p><strong>Phone:</strong> <span id="view-phone"></span></p>
-                    <p><strong>Address:</strong> <span id="view-address"></span></p>
-                    <button class="edit-profile-btn" onclick="enableProfileEditing()">✏️ Edit Profile</button>
-                </div>
-
-                <div class="exercise-options-buttons">
-                    <button class="exercise-choice-btn" onclick="selectExerciseCategory('Cardio')">🏃‍♂️ Cardio Training</button>
-                    <button class="exercise-choice-btn" onclick="selectExerciseCategory('Strength')">🏋️‍♂️ Strength Workout</button>
-                    <button class="exercise-choice-btn" onclick="selectExerciseCategory('Yoga')">🧘‍♂️ Yoga & Flexibility</button>
-                </div>
-
-                <!-- Volume and Control Panels -->
-                <div class="music-control-row" style="margin-top: 25px;">
-                    <span style="color: var(--text-main);">🎵 Background Track Volume</span>
-                    <input type="range" id="volume" min="0" max="10" value="5">
-                </div>
-
-                <div class="rest-control" style="margin-top: 15px;">
-                    <button id="mute-btn" onclick="toggleMute()">🔊</button>
-                    <span style="color: var(--text-main);">Rest Timer: <strong id="rest-display">30s</strong></span>
-                    <div style="display: flex; gap: 5px;">
-                        <button onclick="changeRestTime(-5)">-5s</button>
-                        <button onclick="changeRestTime(5)">+5s</button>
-                    </div>
-                </div>
-
-                <!-- Footer Navigation Panel -->
-                <div id="app-navigation" class="bottom-nav-bar" style="display: none;">
-                    <button class="nav-item info-icon-btn" onclick="toggleUserInfoMenu()">👤 Profile</button>
-                    <button class="nav-item" id="theme-btn" onclick="toggleTheme()">☀️ Light</button>
-                    <button class="nav-item reset-btn" onclick="resetProfile()">🔄 Reset</button>
+            <!-- Avatar Selection Options -->
+            <div style="margin-top: 15px;">
+                <label style="font-weight: 600;">Choose Profile Display Mode:</label>
+                <div class="avatar-options">
+                    <label><input type="radio" name="avatar-type" value="upload" checked onchange="switchAvatarView()"> Upload Photo</label>
+                    <label><input type="radio" name="avatar-type" value="anime" onchange="switchAvatarView()"> Anime Character</label>
                 </div>
             </div>
 
+            <!-- File Upload Input -->
+            <div id="avatar-input-container" style="margin-top: 10px; display: block;">
+                <input type="file" id="user-avatar" accept="image/*">
+            </div>
+
+            <!-- Anime Dropdown Setup -->
+            <div id="anime-select-container" style="margin-top: 10px; display: none;">
+                <select id="anime-dp-select" style="width: 100%;">
+                    <option value="images/naruto.png">🦊 Naruto Uzumaki (Naruto)</option>
+                    <option value="images/kamado.png">⚔️ Tanjiro Kamado (Demon Slayer)</option>
+                    <option value="images/kakashi.png">🦅 Eren Yeager (Attack on Titan)</option>
+                    <option value="images/gojo.png">🔮 Satoru Gojo (Jujutsu Kaisen)</option>
+                    <option value="images/narutof.png">💀 Light Yagami (Death Note)</option>
+                    <option value="images/marin.png">✨ Marin Kitagawa (My Dress-Up Darling)</option>
+                </select>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <button class="next-btn full-width-btn" onclick="validateAndSaveProfile()">Save Profile & Continue ➡️</button>
+            </div>
+        </div>
+
+        <!-- 3. EXERCISE DASHBOARD -->
+        <div id="exercise-screen" class="profile-card" style="display: none;">
+            <div class="dashboard-header">
+                <h2>Exercise Dashboard</h2>
+                <div id="view-avatar-div" class="avatar-circle"></div>
+            </div>
+
+            <div class="workout-buttons">
+                <button class="exercise-choice-btn" onclick="selectExerciseCategory('Cardio')">🏃 Cardio Training</button>
+                <button class="exercise-choice-btn" onclick="selectExerciseCategory('Strength')">🏋️ Strength Workout</button>
+                <button class="exercise-choice-btn" onclick="selectExerciseCategory('Yoga')">🧘 Yoga & Flexibility</button>
+            </div>
+
+            <!-- Volume and Control Panels -->
+            <div class="music-control-row" style="margin-top: 25px;">
+                <span>🔊 Background Track Volume</span>
+                <input type="range" id="volume" min="0" max="10" value="5">
+            </div>
+
+            <div class="rest-control" style="margin-top: 15px;">
+                <span>Rest Timer: <strong id="rest-display">30s</strong></span>
+                <div style="display: flex; gap: 5px; margin-top: 5px;">
+                    <button class="timer-btn" onclick="changeRestTime(-5)">-5s</button>
+                    <button class="timer-btn" onclick="changeRestTime(5)">+5s</button>
+                </div>
+            </div>
+
+            <!-- Footer Navigation Panel (તમારા અસલી બટનો) -->
+            <div class="bottom-nav-bar" style="margin-top: 30px;">
+                <button onclick="goToProfile()" class="nav-item"><span class="nav-icon">👤</span> Profile</button>
+                <button onclick="toggleTheme()" class="nav-item"><span class="nav-icon">☀️</span> Light</button>
+                <button onclick="resetProfile()" class="nav-item"><span class="nav-icon">🔄</span> Reset</button>
+            </div>
         </div>
     </div>
 
-    <!-- Background Audio Component -->
-    <audio id="bg-music" loop src="s1.mp4"></audio>
-
-    <script type="module" src="logic.js"></script>
+    <script src="logic.js"></script>
 </body>
 </html>
