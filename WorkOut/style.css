@@ -75,7 +75,7 @@ input:hover, select:hover, input:focus, select:focus {
     border-color: var(--pink-accent);
 }
 
-/* Perfect Custom Circle Big Boxes */
+/* Perfect Circle Containers for Big Emojis */
 .giant-emoji-box {
     width: 140px !important;
     height: 140px !important;
@@ -99,7 +99,7 @@ input:hover, select:hover, input:focus, select:focus {
     box-shadow: 0 0 15px rgba(255, 71, 126, 0.4) !important;
 }
 
-/* Capsule Shaped Buttons */
+/* Clean Round Buttons */
 .round-btn {
     width: 100%;
     padding: 14px;

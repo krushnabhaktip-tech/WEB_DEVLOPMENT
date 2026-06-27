@@ -1,11 +1,11 @@
-// Data Management Arrays
+// Data Arrays
 const exerciseBank = [
     { name: "Jumping Jacks", emoji: "🤸" },
     { name: "Squats Challenge", emoji: "🏋️" },
     { name: "Push-Ups Mode", emoji: "💪" }
 ];
 
-// SEPARated Day Trackers from LocalStorage
+// COMPLETELY SEPARATE DAYS FOR BOTH TRACKERS
 let stepTrackerDay = parseInt(localStorage.getItem('stepTrackerDayIndex')) || 3;
 let workoutRoutineDay = parseInt(localStorage.getItem('workoutRoutineDayIndex')) || 3;
 
@@ -22,14 +22,14 @@ let uploadedAvatarData = null;
 let musicStarted = false;
 let isMuted = false;
 
-// Background Sound System
+// Audio Management System
 function startBackgroundMusic() {
     if (!musicStarted) {
         const audio = document.getElementById('bg-audio');
         audio.volume = 0.4;
         audio.play().then(() => {
             musicStarted = true;
-        }).catch(err => console.log("Audio waiting for touch initialization"));
+        }).catch(err => console.log("Audio awaiting user interaction initialization"));
     }
 }
 
@@ -53,24 +53,27 @@ function adjustVolume(val) {
     audio.volume = val;
 }
 
+// Start App: Always load Profile Setup Screen First mandatory!
 function startApp() {
     document.getElementById('welcome-screen').style.display = 'none';
     
-    // Check if user already exists
+    // Check if previous data exists to pre-fill, but open setup screen first anyway
     const savedProfile = localStorage.getItem('localWorkoutProfile');
     if (savedProfile) {
         const profile = JSON.parse(savedProfile);
-        document.getElementById('view-avatar-div').style.backgroundImage = `url('${profile.avatarSrc}')`;
-        document.getElementById('exercise-screen').style.display = 'block';
-    } else {
-        document.getElementById('profile-title-text').innerText = "📝 Create Profile";
-        document.getElementById('profile-cancel-btn').style.display = 'none';
-        document.getElementById('profile-setup-card').style.display = 'block';
+        document.getElementById('user-name').value = profile.name;
+        document.getElementById('user-age').value = profile.age;
+        document.getElementById('user-email').value = profile.email;
     }
+    
+    document.getElementById('profile-title-text').innerText = "📝 Create Profile";
+    document.getElementById('profile-cancel-btn').style.display = 'none';
+    document.getElementById('profile-setup-card').style.display = 'block';
+    
     startBackgroundMusic();
 }
 
-// Editable Profile Mode Controllers
+// Trigger Profile Screen manually from Dashboard Avatar icon
 function goToProfileEdit() {
     const savedProfile = localStorage.getItem('localWorkoutProfile');
     if (savedProfile) {
@@ -111,7 +114,7 @@ function validateAndSaveProfile() {
     const email = document.getElementById('user-email').value.trim();
 
     if (!name || !age || !email) {
-        alert("Please fill out all setup questions completely!");
+        alert("Please fill out all setup details!");
         return;
     }
 
@@ -126,7 +129,18 @@ function validateAndSaveProfile() {
     document.getElementById('exercise-screen').style.display = 'block';
 }
 
-// Separate Walking Tracking Section
+// Dedicated Separate Settings Panel Open/Close Rules
+function openSettingsPanel() {
+    document.getElementById('exercise-screen').style.display = 'none';
+    document.getElementById('pure-settings-screen').style.display = 'block';
+}
+
+function closeSettingsPanel() {
+    document.getElementById('pure-settings-screen').style.display = 'none';
+    document.getElementById('exercise-screen').style.display = 'block';
+}
+
+// 🏃 Step Tracker Engine Section
 function openStepTracker() {
     document.getElementById('exercise-options-panel').style.display = 'none';
     document.getElementById('step-day-title').innerText = `Day ${stepTrackerDay}`;
@@ -150,7 +164,7 @@ function toggleStepTracking() {
             document.getElementById('live-steps').innerText = stepCount;
             document.getElementById('live-distance').innerText = (stepCount * 0.0007).toFixed(2);
             if (stepCount >= 10) {
-                document.getElementById('save-day-btn').style.style.display = 'block';
+                document.getElementById('save-day-btn').style.display = 'block';
             }
         }, 800);
     } else {
@@ -161,7 +175,7 @@ function toggleStepTracking() {
 }
 
 function saveAndNextStepDay() {
-    alert(`Day ${stepTrackerDay} Complete! Moving to next Step Tracking Day!`);
+    alert(`Day ${stepTrackerDay} Steps Goal Reached Successfully!`);
     clearInterval(trackInterval);
     isTracking = false;
     stepCount = 0;
@@ -174,7 +188,7 @@ function saveAndNextStepDay() {
     closeStepTracker();
 }
 
-// Separate Workout Routine Panel Section
+// 🏋️🧘 Workout Routines Section
 function openWorkoutRoutine(category) {
     selectedCategory = category;
     activeExerciseIndex = 0;
@@ -228,7 +242,7 @@ function navigateExercise(dir) {
     
     activeExerciseIndex += dir;
     if (activeExerciseIndex >= exerciseBank.length) {
-        alert(`Day ${workoutRoutineDay} Workouts finished successfully!`);
+        alert(`Day ${workoutRoutineDay} Routine Workouts Finished successfully!`);
         workoutRoutineDay++;
         localStorage.setItem('workoutRoutineDayIndex', workoutRoutineDay);
         closeWorkoutRoutine();
@@ -244,18 +258,6 @@ function closeWorkoutRoutine() {
     isRoutineTimerRunning = false;
     document.getElementById('workout-routine-panel').style.display = 'none';
     document.getElementById('exercise-options-panel').style.display = 'flex';
-}
-
-function toggleSettingsPanel() {
-    const panel = document.getElementById('settings-panel');
-    const options = document.getElementById('exercise-options-panel');
-    if (panel.style.display === 'none') {
-        panel.style.display = 'block';
-        options.style.display = 'none';
-    } else {
-        panel.style.display = 'none';
-        options.style.display = 'flex';
-    }
 }
 
 function toggleTheme() {
