@@ -9,14 +9,12 @@
 <body class="dark-mode">
 
     <div id="app-box">
-        <!-- 1. WELCOME SCREEN -->
         <div id="welcome-screen" class="profile-card">
             <h2>Welcome to Workout Hub</h2>
             <p>Set up your profile and manage your daily routines perfectly.</p>
             <button class="next-btn" onclick="startApp()">Get Started 🚀</button>
         </div>
 
-        <!-- 2. CREATE PROFILE CARD -->
         <div id="profile-setup-card" class="profile-card" style="display: none;">
             <h2>Create Profile</h2>
             
@@ -32,7 +30,6 @@
                 <div>
                     <label>Gender</label>
                     <select id="user-gender">
-                        <option value="">Select Gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                     </select>
@@ -53,10 +50,9 @@
 
             <div style="margin-top: 15px;">
                 <label>Address</label>
-                <input type="text" id="user-address" placeholder="Enter address" style="width: 100%;">
+                <input type="text" id="user-address" placeholder="Enter address">
             </div>
 
-            <!-- Avatar Selection Options -->
             <div style="margin-top: 15px;">
                 <label style="font-weight: 600;">Choose Profile Display Mode:</label>
                 <div class="avatar-options">
@@ -65,14 +61,12 @@
                 </div>
             </div>
 
-            <!-- File Upload Input -->
             <div id="avatar-input-container" style="margin-top: 10px; display: block;">
-                <input type="file" id="user-avatar" accept="image/*">
+                <input type="file" id="user-avatar" accept="image/*" onchange="previewUploadedFile(event)">
             </div>
 
-            <!-- Anime Dropdown Setup -->
             <div id="anime-select-container" style="margin-top: 10px; display: none;">
-                <select id="anime-dp-select" style="width: 100%;">
+                <select id="anime-dp-select">
                     <option value="images/naruto.png">🦊 Naruto Uzumaki (Naruto)</option>
                     <option value="images/kamado.png">⚔️ Tanjiro Kamado (Demon Slayer)</option>
                     <option value="images/kakashi.png">🦅 Eren Yeager (Attack on Titan)</option>
@@ -83,46 +77,53 @@
             </div>
 
             <div style="margin-top: 20px;">
-                <button class="next-btn full-width-btn" onclick="validateAndSaveProfile()">Save Profile & Continue ➡️</button>
+                <button class="next-btn full-width-btn" id="save-profile-btn" onclick="validateAndSaveProfile()">Save Profile & Continue ➡️</button>
             </div>
         </div>
 
-        <!-- 3. EXERCISE DASHBOARD -->
         <div id="exercise-screen" class="profile-card" style="display: none;">
             <div class="dashboard-header">
                 <h2>Exercise Dashboard</h2>
-                <div id="view-avatar-div" class="avatar-circle"></div>
-            </div>
-
-            <div class="workout-buttons">
-                <button class="exercise-choice-btn" onclick="selectExerciseCategory('Cardio')">🏃 Cardio Training</button>
-                <button class="exercise-choice-btn" onclick="selectExerciseCategory('Strength')">🏋️ Strength Workout</button>
-                <button class="exercise-choice-btn" onclick="selectExerciseCategory('Yoga')">🧘 Yoga & Flexibility</button>
-            </div>
-
-            <!-- Volume and Control Panels -->
-            <div class="music-control-row" style="margin-top: 25px;">
-                <span>🔊 Background Track Volume</span>
-                <input type="range" id="volume" min="0" max="10" value="5">
-            </div>
-
-            <div class="rest-control" style="margin-top: 15px;">
-                <span>Rest Timer: <strong id="rest-display">30s</strong></span>
-                <div style="display: flex; gap: 5px; margin-top: 5px;">
-                    <button class="timer-btn" onclick="changeRestTime(-5)">-5s</button>
-                    <button class="timer-btn" onclick="changeRestTime(5)">+5s</button>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button class="settings-circle-btn" onclick="toggleSettingsPanel()">⚙️</button>
+                    <div id="view-avatar-div" class="avatar-circle"></div>
                 </div>
             </div>
 
-            <!-- Footer Navigation Panel (તમારા અસલી બટનો) -->
-            <div class="bottom-nav-bar" style="margin-top: 30px;">
-                <button onclick="goToProfile()" class="nav-item"><span class="nav-icon">👤</span> Profile</button>
-                <button onclick="toggleTheme()" class="nav-item"><span class="nav-icon">☀️</span> Light</button>
-                <button onclick="resetProfile()" class="nav-item"><span class="nav-icon">🔄</span> Reset</button>
+            <div class="workout-buttons">
+                <button class="exercise-choice-btn" id="btn-cardio" onclick="selectExerciseCategory('Cardio')">🏃 Cardio Training</button>
+                <button class="exercise-choice-btn" id="btn-strength" onclick="selectExerciseCategory('Strength')">🏋️ Strength Workout</button>
+                <button class="exercise-choice-btn" id="btn-yoga" onclick="selectExerciseCategory('Yoga')">🧘 Yoga & Flexibility</button>
+            </div>
+
+            <div id="settings-panel" style="display: none; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                <div class="music-control-row">
+                    <span>Background Track Volume</span>
+                    <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5" oninput="adjustVolume(this.value)">
+                </div>
+
+                <div class="rest-control" style="margin-top: 15px;">
+                    <span>Rest Timer: <strong id="rest-display">30s</strong></span>
+                    <div style="display: flex; gap: 5px; margin-top: 5px;">
+                        <button class="timer-btn" onclick="changeRestTime(-5)">-5s</button>
+                        <button class="timer-btn" onclick="changeRestTime(5)">+5s</button>
+                    </div>
+                </div>
+
+                <div class="bottom-nav-bar" style="margin-top: 20px;">
+                    <button onclick="toggleTheme()" class="nav-item">☀️ Light / 🌙 Dark</button>
+                    <button onclick="resetProfile()" class="nav-item">🔄 Reset</button>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; display: flex; justify-content: center;">
+                <button onclick="goToProfile()" class="nav-item">👤 Profile</button>
             </div>
         </div>
     </div>
 
-    <script src="logic.js"></script>
+    <audio id="bg-audio" loop>
+        <source src="audio/workout-track.mp3" type="audio/mpeg">
+    </audio>
 </body>
 </html>
