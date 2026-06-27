@@ -17,9 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
     bgMusic = document.getElementById('bg-music');
     volumeSlider = document.getElementById('volume');
 
-    if(volumeSlider) {
+    if (volumeSlider) {
         volumeSlider.addEventListener('input', function(e) {
-            if(bgMusic) {
+            if (bgMusic) {
                 bgMusic.volume = e.target.value / 10;
                 document.getElementById('mute-btn').innerText = bgMusic.volume > 0 ? "🔊" : "🔇";
             }
@@ -28,11 +28,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* Explicit mapping for direct click execution in Chrome windows */
-window.startWorkout = function() {
+window.startworkout = function() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('main-workout-content').style.display = 'block';
-    
-    if(bgMusic && volumeSlider) {
+
+    if (bgMusic && volumeSlider) {
         bgMusic.volume = volumeSlider.value / 10;
         bgMusic.play().catch(e => console.log("Audio play update notification:", e));
     }
@@ -58,7 +58,7 @@ window.validateAndSaveProfile = async function() {
     const age = document.getElementById('user-age').value.trim();
     const gender = document.getElementById('user-gender').value;
     const email = document.getElementById('user-email').value.trim();
-    const password = document.getElementById('user-password').value;
+    const password = document.getElementById('user-password').value.trim();
     const phone = document.getElementById('user-phone').value.trim();
     const address = document.getElementById('user-address').value.trim();
     const avatarType = document.querySelector('input[name="avatar-type"]:checked').value;
@@ -67,6 +67,7 @@ window.validateAndSaveProfile = async function() {
         alert("Please complete all details before moving forward! ⚠️");
         return;
     }
+
     if (password.length < 6) {
         alert("Password must be at least 6 characters long! 🔐");
         return;
@@ -75,6 +76,7 @@ window.validateAndSaveProfile = async function() {
     userProfile = { name, age, gender, email, password, phone, address, avatarType };
 
     if (avatarType === "anime") {
+        // Dynamic Character Selected Image Path assigned perfectly
         userProfile.avatarValue = document.getElementById('anime-dp-select').value;
         await sendDataToFirebase();
     } else {
@@ -82,7 +84,7 @@ window.validateAndSaveProfile = async function() {
         if (fileInput.files && fileInput.files[0]) {
             const reader = new FileReader();
             reader.onload = async function(e) {
-                userProfile.avatarValue = e.target.result; 
+                userProfile.avatarValue = e.target.result;
                 await sendDataToFirebase();
             };
             reader.readAsDataURL(fileInput.files[0]);
@@ -107,11 +109,11 @@ async function sendDataToFirebase() {
             avatarValue: userProfile.avatarValue,
             createdAt: new Date()
         });
-        console.log("Saved: ", docRef.id);
+        console.log("Saved Doc ID: ", docRef.id);
         showExerciseScreen();
     } catch (error) {
-        console.error("Database status tracking:", error);
-        showExerciseScreen(); 
+        console.error("Database status tracking error:", error);
+        showExerciseScreen();
     }
 }
 
@@ -124,10 +126,26 @@ function showExerciseScreen() {
     document.getElementById('view-address').innerText = userProfile.address;
 
     const avatarDiv = document.getElementById('view-avatar-div');
+    const mainProfileBtn = document.querySelector('.info-icon-btn');
+
+    // Circle Image Avatar Render Logic
     if (userProfile.avatarType === "anime") {
-        avatarDiv.innerHTML = `<span style="font-size: 40px;">${userProfile.avatarValue}</span>`;
+        avatarDiv.innerHTML = `<img src="${userProfile.avatarValue}" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border: 2px solid var(--accent-color);">`;
+        if (mainProfileBtn) {
+            mainProfileBtn.innerHTML = `<img src="${userProfile.avatarValue}" style="width:22px; height:22px; border-radius:50%; object-fit:cover; vertical-align:middle; margin-right:6px;"> Profile`;
+        }
     } else {
-        avatarDiv.innerHTML = `<img src="${userProfile.avatarValue}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">`;
+        if (userProfile.avatarValue && (userProfile.avatarValue.startsWith("data:image") || userProfile.avatarValue.includes("/"))) {
+            avatarDiv.innerHTML = `<img src="${userProfile.avatarValue}" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border: 2px solid var(--accent-color);">`;
+            if (mainProfileBtn) {
+                mainProfileBtn.innerHTML = `<img src="${userProfile.avatarValue}" style="width:22px; height:22px; border-radius:50%; object-fit:cover; vertical-align:middle; margin-right:6px;"> Profile`;
+            }
+        } else {
+            avatarDiv.innerHTML = `<span style="font-size: 40px;">👤</span>`;
+            if (mainProfileBtn) {
+                mainProfileBtn.innerHTML = `👤 Profile`;
+            }
+        }
     }
 
     document.getElementById('profile-setup-card').style.display = 'none';
@@ -136,11 +154,11 @@ function showExerciseScreen() {
 }
 
 window.selectExerciseCategory = function(category) {
-    alert(`⚡ Routine Initiated: '${category}' track timing sequence active!`);
+    alert(`🏋️ Routine Initiated: '${category}' track timing sequence active!`);
 };
 
 window.switchTab = function(tabName) {
-   console.log(`Tab event: ${tabName}`);
+    console.log(`Tab event: ${tabName}`);
 };
 
 window.enableProfileEditing = function() {
@@ -179,4 +197,4 @@ window.toggleTheme = function() {
 
 window.resetProfile = function() {
     location.reload();
-}
+};
