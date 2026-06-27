@@ -9,17 +9,17 @@
 <body class="dark-mode" onclick="startBackgroundMusic()">
 
     <div id="app-box">
-        <!-- 1. Welcome Screen (Fixed Small Button View) -->
+        <!-- 1. Welcome Screen -->
         <div id="welcome-screen" class="profile-card welcome-card">
             <h2>Welcome to Workout Hub 💪</h2>
             <p class="sub-text">Your Ultimate Fitness Companion ⚡</p>
             <div class="welcome-spacer"></div>
-            <button class="round-btn btn-start" onclick="startApp()">Start Workout 😊</button>
+            <button class="round-btn btn-start" onclick="startApp()">Start Workout (❁´◡`❁)</button>
         </div>
 
-        <!-- 2. Profile Setup (Fixed White Input/Hover Text issues) -->
+        <!-- 2. Profile Setup / Edit Card -->
         <div id="profile-setup-card" class="profile-card" style="display: none;">
-            <h2>📝 Create Profile</h2>
+            <h2><span id="profile-title-text">📝 Create Profile</span></h2>
             
             <div class="form-grid">
                 <div>
@@ -57,40 +57,40 @@
 
             <div id="anime-select-container" style="margin-top: 10px; display: none;">
                 <select id="anime-dp-select">
-                    <option value="images/naruto.png">Naruto Uzumaki</option>
-                    <option value="images/nezuko.png">Nezuko</option>
-                    <option value="images/gojo.png">Gojo Satoru</option>
+                    <option value="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=150">Anime Option 1</option>
+                    <option value="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=150">Anime Option 2</option>
                 </select>
             </div>
 
             <div style="margin-top: 25px; display: flex; gap: 12px;">
                 <button class="round-btn btn-start" onclick="validateAndSaveProfile()">Save & Continue ➡️</button>
+                <button id="profile-cancel-btn" class="round-btn btn-back" onclick="cancelProfileEdit()" style="display: none;">Cancel</button>
             </div>
         </div>
 
-        <!-- 3. Exercise Dashboard Screen -->
+        <!-- 3. Main Exercise Dashboard Screen -->
         <div id="exercise-screen" class="profile-card" style="display: none;">
             <div class="dashboard-header">
                 <button class="settings-circle-btn" onclick="toggleSettingsPanel()">⚙️</button>
                 <h2 style="font-size: 20px; margin: 0;">Exercise Dashboard</h2>
-                <div id="view-avatar-div" class="avatar-circle clickable-avatar" onclick="goToProfile()"></div>
+                <!-- Clicking here opens profile edit mode -->
+                <div id="view-avatar-div" class="avatar-circle clickable-avatar" onclick="goToProfileEdit()"></div>
             </div>
 
-            <!-- Dashboard Menu Buttons -->
+            <!-- Dashboard Options Menu Buttons -->
             <div id="exercise-options-panel" class="workout-buttons">
                 <button class="exercise-choice-btn" onclick="openStepTracker()">🏃 Walking & Running Tracker</button>
                 <button class="exercise-choice-btn" onclick="openWorkoutRoutine('Strength')">🏋️ Strength Workout</button>
                 <button class="exercise-choice-btn" onclick="openWorkoutRoutine('Yoga')">🧘 Yoga & Flexibility</button>
             </div>
 
-            <!-- 🏃 Step Tracker Panel (Fixed Tiny Emoji & Styled Round Controls) -->
+            <!-- 🏃 Separate Section: Step Tracker Panel -->
             <div id="step-tracker-panel" style="display: none; margin-top: 20px; text-align: center;">
                 <div class="day-info-box">
-                    <h2 id="current-day-title">Day 3</h2>
+                    <h2 id="step-day-title">Day 1</h2>
                     <p>🎯 Target Goal: 10 Steps</p>
                 </div>
                 
-                <!-- Huge Emoji Circle Container -->
                 <div class="workout-animation-container giant-emoji-box">
                     <span id="animation-emoji">🧍</span>
                 </div>
@@ -103,20 +103,20 @@
                 
                 <div class="button-group-vertical">
                     <button id="start-track-btn" class="round-btn btn-start" onclick="toggleStepTracking()">Start Tracking 🟢</button>
-                    <button id="save-day-btn" class="round-btn btn-save" onclick="saveAndNextDay()" style="display: none; margin-top: 10px;">Save Progress 💾</button>
+                    <button id="save-day-btn" class="round-btn btn-save" onclick="saveAndNextStepDay()" style="display: none; margin-top: 10px;">Save Progress 💾</button>
                     <button class="round-btn btn-back" onclick="closeStepTracker()" style="margin-top: 10px;">Back 🔙</button>
                 </div>
             </div>
 
-            <!-- 🏋️🧘 Workout Routine Play Panel -->
+            <!-- 🏋️🧘 Separate Section: Workout Routine Play Panel -->
             <div id="workout-routine-panel" style="display: none; margin-top: 20px; text-align: center;">
                 <div class="day-info-box pink-theme-box">
                     <h2 id="routine-day-title">Day 1 - Strength</h2>
-                    <p id="routine-day-sub">Exercise 1 of 10</p>
+                    <p id="routine-day-sub">Exercise 1 of 3</p>
                 </div>
 
                 <div class="workout-animation-container giant-emoji-box pink-border">
-                    <span id="routine-emoji" class="workout-bounce">🏋️</span>
+                    <span id="routine-emoji">🏋️</span>
                 </div>
 
                 <div class="exercise-detail-card">
@@ -133,21 +133,27 @@
                 <button class="round-btn btn-back" onclick="closeWorkoutRoutine()" style="margin-top: 20px;">Exit Workout 🔙</button>
             </div>
 
-            <!-- Settings Panel -->
-            <div id="settings-panel" style="display: none; margin-top: 20px;">
-                <label>🔊 Background Track Volume</label>
-                <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5" oninput="adjustVolume(this.value)" style="margin-top: 10px;">
+            <!-- Clean Settings Container -->
+            <div id="settings-panel" style="display: none; margin-top: 20px; text-align: left;">
+                <!-- One click Mute / Unmute Button -->
+                <button id="quick-mute-btn" class="round-btn btn-start" onclick="toggleMute()" style="margin-bottom: 15px;">
+                    🔊 Audio Status: Playing
+                </button>
+                
+                <label>🔊 Background Track Volume Adjust</label>
+                <input type="range" id="volume" min="0" max="1" step="0.1" value="0.4" oninput="adjustVolume(this.value)" style="margin-top: 10px; width: 100%;">
+                
                 <button class="round-btn btn-back" onclick="toggleTheme()" style="margin-top: 15px;">🌓 Switch Theme</button>
                 <button class="round-btn btn-back" onclick="toggleSettingsPanel()" style="margin-top: 10px;">Close Settings</button>
             </div>
         </div>
     </div>
 
-    <!-- Background Music -->
+    <!-- Background Audio Loop -->
     <audio id="bg-audio" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
-    <script type="module" src="logic.js"></script>
+    <script src="logic.js"></script>
 </body>
 </html>

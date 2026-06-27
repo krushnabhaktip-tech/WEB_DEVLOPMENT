@@ -1,12 +1,13 @@
 :root {
     --bg-gradient: linear-gradient(135deg, #0b0f19, #1a1f36);
-    --card-bg: rgba(22, 28, 45, 0.85);
-    --input-bg: rgba(255, 255, 255, 0.07);
+    --card-bg: rgba(22, 28, 45, 0.9);
+    --input-bg: rgba(255, 255, 255, 0.08);
     --input-focus-bg: rgba(255, 255, 255, 0.15);
     --text-color: #ffffff;
     --pink-accent: #ff477e;
     --pink-hover: #ff2a63;
     --green-btn: linear-gradient(135deg, #2ecc71, #27ae60);
+    --btn-save-color: linear-gradient(135deg, #3498db, #2980b9);
 }
 
 * {
@@ -24,37 +25,23 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: 15px;
-    overflow-x: hidden;
 }
 
 #app-box {
     width: 100%;
-    max-width: 420px;
+    max-width: 410px;
 }
 
-/* Glass Card Definition */
 .profile-card {
     background: var(--card-bg);
     padding: 25px;
-    border-radius: 28px;
+    border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(20px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.6);
     text-align: center;
 }
 
-.profile-card h2 {
-    font-size: 24px;
-    margin-bottom: 15px;
-    letter-spacing: 0.5px;
-}
-
-.sub-text {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 14px;
-}
-
-/* 📝 Inputs Fixes: મજબૂત કલર્સ અને હોવર ઇફેક્ટ */
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -73,61 +60,53 @@ label {
 
 input, select {
     width: 100%;
-    padding: 12px 14px;
+    padding: 12px;
     background: var(--input-bg);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #ffffff !important; /* સફેદ અક્ષરો ચોખ્ખા વંચાશે */
+    color: #ffffff !important;
     border-radius: 14px;
     font-size: 14px;
     outline: none;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
-/* માઉસ લાવવાથી (Hover) અને ક્લિક કરવાથી (Focus) બેકગ્રાઉન્ડ બદલાશે */
 input:hover, select:hover, input:focus, select:focus {
     background: var(--input-focus-bg);
     border-color: var(--pink-accent);
-    box-shadow: 0 0 10px rgba(255, 71, 126, 0.2);
 }
 
-option {
-    background-color: #1a1f36;
-    color: #fff;
-}
-
-/* 🎯 Huge Giant Emoji Round Box Fix */
+/* Perfect Custom Circle Big Boxes */
 .giant-emoji-box {
-    width: 150px !important; /* મોટું અને ભવ્ય રાઉન્ડ બોક્સ */
-    height: 150px !important;
+    width: 140px !important;
+    height: 140px !important;
     border-radius: 50% !important;
-    margin: 25px auto !important;
+    margin: 20px auto !important;
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(255, 255, 255, 0.05);
     border: 3px solid #3498db;
-    box-shadow: 0 0 20px rgba(52, 152, 218, 0.3);
+    box-shadow: 0 0 15px rgba(52, 152, 218, 0.3);
 }
 
-/* ઇમોજીની સાઈઝ મોટી કરી દીધી */
 #animation-emoji, #routine-emoji {
-    font-size: 75px !important; 
-    display: inline-block;
+    font-size: 70px !important;
+    line-height: 1;
 }
 
 .pink-border {
     border-color: var(--pink-accent) !important;
-    box-shadow: 0 0 20px rgba(255, 71, 126, 0.4) !important;
+    box-shadow: 0 0 15px rgba(255, 71, 126, 0.4) !important;
 }
 
-/* 💊 Capsule Round Shaped Buttons Setup */
+/* Capsule Shaped Buttons */
 .round-btn {
     width: 100%;
-    padding: 15px;
-    font-size: 16px;
+    padding: 14px;
+    font-size: 15px;
     font-weight: 700;
     border: none;
-    border-radius: 50px; /* પરફેક્ટ કેપ્સ્યુલ ગોળ બટન */
+    border-radius: 50px;
     cursor: pointer;
     color: #ffffff;
     transition: all 0.2s ease;
@@ -138,12 +117,10 @@ option {
 
 .btn-start {
     background: var(--green-btn);
-    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
 }
 
-.btn-start:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(46, 204, 113, 0.5);
+.btn-save {
+    background: var(--btn-save-color);
 }
 
 .btn-back {
@@ -151,15 +128,10 @@ option {
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.btn-back:hover {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-/* Navigation Dashboard List Row */
 .workout-buttons {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
     margin-top: 20px;
 }
 
@@ -167,28 +139,26 @@ option {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #fff;
-    padding: 16px 20px;
-    border-radius: 18px;
+    padding: 15px;
+    border-radius: 50px;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    text-align: left;
+    text-align: center;
     transition: all 0.2s;
 }
 
 .exercise-choice-btn:hover {
     border-color: var(--pink-accent);
-    background: rgba(255, 71, 126, 0.08);
-    transform: translateX(4px);
+    background: rgba(255, 71, 126, 0.1);
 }
 
-/* ⏱️ Premium Workout Elements */
 #routine-timer-display {
-    font-size: 55px;
+    font-size: 50px;
     font-weight: 800;
-    font-family: monospace;
+    margin: 10px 0;
     color: #fff;
-    text-shadow: 0 0 10px var(--pink-accent);
+    text-shadow: 0 0 8px var(--pink-accent);
 }
 
 .media-controls-group {
@@ -196,7 +166,7 @@ option {
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .media-main-pink-btn {
@@ -205,7 +175,7 @@ option {
     color: white;
     border: none;
     padding: 14px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     border-radius: 50px;
     cursor: pointer;
@@ -215,7 +185,7 @@ option {
     background: rgba(255, 255, 255, 0.07);
     border: 1px solid rgba(255, 255, 255, 0.15);
     color: white;
-    padding: 12px 20px;
+    padding: 12px 18px;
     border-radius: 50px;
     cursor: pointer;
 }
@@ -225,13 +195,13 @@ option {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 15px;
+    padding-bottom: 12px;
     margin-bottom: 15px;
 }
 
 .avatar-circle {
-    width: 45px;
-    height: 45px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     border: 2px solid var(--pink-accent);
     background-size: cover;
