@@ -1,32 +1,30 @@
- :root {
-    --bg-main: #121212;
-    --card-bg: rgba(20, 20, 20, 0.65);
+:root {
+    --bg-main: #111726;
+    --card-bg: rgba(22, 28, 45, 0.65);
     --text-main: #ffffff;
     --btn-primary: #2ecc71;
     --btn-hover: #27ae60;
-    --input-bg: rgba(255, 255, 255, 0.1);
-    --border-color: rgba(255, 255, 255, 0.2);
-    --box-shadow-color: rgba(0, 0, 0, 0.6);
+    --input-bg: rgba(255, 255, 255, 0.08);
+    --border-color: rgba(255, 255, 255, 0.15);
+    --box-shadow-color: rgba(0, 0, 0, 0.5);
 }
 
 .light-mode {
     --bg-main: #eef2f3;
-    --card-bg: rgba(255, 255, 255, 0.8);
+    --card-bg: rgba(255, 255, 255, 0.85);
     --text-main: #2c3e50;
     --btn-primary: #2ecc71;
     --btn-hover: #1abc9c;
     --input-bg: rgba(0, 0, 0, 0.05);
-    --border-color: rgba(0, 0, 0, 0.15);
-    --box-shadow-color: rgba(0, 0, 0, 0.15);
+    --border-color: rgba(0, 0, 0, 0.12);
+    --box-shadow-color: rgba(0, 0, 0, 0.1);
 }
 
+/* 🎨 Shifting Neon Gradient Background Animation */
 body {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('yoga.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-color: var(--bg-main);
+    background: linear-gradient(-45deg, #0f172a, #1e1b4b, #2e1065, #111827);
+    background-size: 400% 400%;
+    animation: gradientShifter 12s ease infinite;
     color: var(--text-main);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
@@ -37,78 +35,88 @@ body {
     transition: background-color 0.4s ease, color 0.4s ease;
 }
 
+@keyframes gradientShifter {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Adjusted app box width to fit neatly */
 #app-box {
     width: 100%;
-    max-width: 520px;
-    padding: 20px;
+    max-width: 460px; 
+    padding: 15px;
 }
 
 .profile-card {
     background: var(--card-bg);
-    padding: 35px;
-    border-radius: 24px;
-    box-shadow: 0 12px 40px 0 var(--box-shadow-color);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 28px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px var(--box-shadow-color);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Welcome Card made smaller & more compact */
 .welcome-card {
-    min-height: 250px;
+    min-height: 180px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
 }
 
 .welcome-spacer {
-    flex-grow: 1;
+    margin-bottom: 20px;
 }
 
 h2 {
     margin-top: 0;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 700;
-    margin-bottom: 15px;
+    text-align: center;
 }
 
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 18px;
+    gap: 12px;
 }
 
 label {
     display: block;
-    margin-bottom: 6px;
-    font-size: 14px;
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-weight: 500;
 }
 
 input, select {
     width: 100%;
     box-sizing: border-box;
-    padding: 12px 14px;
+    padding: 10px 12px;
     background: var(--input-bg);
     border: 1px solid var(--border-color);
     color: var(--text-main);
-    border-radius: 12px;
+    border-radius: 10px;
     outline: none;
 }
 
 .avatar-options {
     display: flex;
-    gap: 25px;
-    margin-top: 10px;
+    gap: 20px;
+    margin-top: 5px;
 }
 
 .next-btn {
     background-color: var(--btn-primary);
     color: white;
     border: none;
-    padding: 14px 24px;
-    border-radius: 14px;
+    padding: 12px 20px;
+    border-radius: 12px;
     cursor: pointer;
     font-weight: 600;
-    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.25);
     transition: background 0.2s, transform 0.1s;
 }
 
@@ -117,93 +125,97 @@ input, select {
 }
 
 .nav-item-btn {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
     color: var(--text-main);
     border: 1px solid var(--border-color);
-    padding: 14px 20px;
-    border-radius: 14px;
+    padding: 12px 18px;
+    border-radius: 12px;
     cursor: pointer;
-    font-weight: 600;
 }
 
 .start-btn {
-    width: 100%;
-    padding: 16px;
-    font-size: 18px;
-    border-radius: 16px;
+    width: 90%;
+    padding: 14px;
+    font-size: 16px;
 }
 
 .workout-buttons {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-top: 30px;
+    gap: 14px;
+    margin-top: 25px;
 }
 
 .exercise-choice-btn {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--border-color);
     color: var(--text-main);
-    border-radius: 16px;
-    padding: 18px;
-    font-size: 16px;
+    border-radius: 14px;
+    padding: 16px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    text-align: left;
     transition: transform 0.2s, border-color 0.2s;
 }
 
 .exercise-choice-btn:hover {
     border-color: var(--btn-primary);
-    transform: scale(1.01);
+    transform: scale(1.02);
 }
 
+/* 🔄 Beautiful Split Header Layout */
 .dashboard-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* This pushes setting left and avatar right! */
     align-items: center;
     border-bottom: 1px solid var(--border-color);
-    padding-bottom: 15px;
+    padding-bottom: 12px;
+    width: 100%;
 }
 
 .settings-circle-btn {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: none;
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.1);
     color: var(--text-main);
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s;
+}
+.settings-circle-btn:hover {
+    transform: rotate(45deg);
 }
 
-/* Avatar Circle Styles */
 .avatar-circle {
-    width: 60px;
-    height: 60px;
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
     background-size: cover;
     background-position: center;
-    border: 3px solid var(--btn-primary);
+    border: 2px solid var(--btn-primary);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* Added cursor pointer to give standard clickable button feel */
 .clickable-avatar {
     cursor: pointer;
 }
 .clickable-avatar:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 12px var(--btn-primary);
+    transform: scale(1.1);
+    box-shadow: 0 0 10px var(--btn-primary);
 }
 
 .music-control-row {
     display: flex;
     align-items: center;
-    gap: 15px;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 10px 15px;
-    border-radius: 30px;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 8px 12px;
+    border-radius: 25px;
     border: 1px solid var(--border-color);
 }
 
@@ -211,29 +223,24 @@ input, select {
     background: var(--btn-primary);
     border: none;
     color: white;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    font-size: 16px;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 input[type="range"] {
     -webkit-appearance: none;
     flex-grow: 1;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    outline: none;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
 }
 
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: var(--btn-primary);
     cursor: pointer;
@@ -243,8 +250,8 @@ input[type="range"]::-webkit-slider-thumb {
     background: #ffffff;
     color: #333333;
     border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
+    padding: 6px 12px;
+    border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
 }
@@ -253,7 +260,7 @@ input[type="range"]::-webkit-slider-thumb {
     display: flex;
     justify-content: space-around;
     border-top: 1px solid var(--border-color);
-    padding-top: 20px;
+    padding-top: 15px;
 }
 
 .nav-item {
@@ -261,7 +268,7 @@ input[type="range"]::-webkit-slider-thumb {
     border: none;
     color: var(--text-main);
     cursor: pointer;
-    font-size: 15px;
+    font-size: 14px;
 }
 .nav-item:hover {
     color: var(--btn-primary);
