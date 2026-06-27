@@ -1,4 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -15,7 +15,7 @@ try {
     app = initializeApp(firebaseConfig);
     db = getFirestore(app);
 } catch (e) {
-    console.log("Offline UI view activated.");
+    console.log("Offline view layout enabled.");
 }
 
 let restTime = 30;
@@ -23,6 +23,7 @@ let uploadedAvatarData = null;
 let isMuted = false;
 let previousVolume = 0.5;
 let isSettingsMode = false;
+let hasProfileRegistered = false;
 
 window.onload = function() {
     loadProfileData();
@@ -32,6 +33,7 @@ function startApp() {
     document.getElementById('welcome-screen').style.display = 'none';
     document.getElementById('profile-setup-card').style.display = 'block';
 }
+
 function switchAvatarView() {
     const avatarType = document.querySelector('input[name="avatar-type"]:checked').value;
     if (avatarType === 'upload') {
@@ -39,7 +41,7 @@ function switchAvatarView() {
         document.getElementById('anime-select-container').style.display = 'none';
     } else {
         document.getElementById('avatar-input-container').style.display = 'none';
-        document.getElementById('anime-select-container').style.display = 'block'; // અહીં મેં 'style.block' લખી દીધું હતું, હવે ફિક્સ થઈ ગયું!
+        document.getElementById('anime-select-container').style.display = 'block';
     }
 }
 
@@ -63,7 +65,7 @@ async function validateAndSaveProfile() {
     const address = document.getElementById('user-address').value.trim();
 
     if (!name || !age || !email || !phone || !address) {
-        alert("Please complete the profile forms setup.");
+        alert("Please completely fill out the input sections.");
         return;
     }
 
@@ -80,6 +82,8 @@ async function validateAndSaveProfile() {
     localStorage.setItem('localWorkoutProfile', JSON.stringify(profileData));
 
     applyProfileToDashboard(profileData);
+    hasProfileRegistered = true;
+
     document.getElementById('profile-setup-card').style.display = 'none';
     document.getElementById('exercise-screen').style.display = 'block';
     
@@ -127,7 +131,6 @@ function toggleMute() {
     }
 }
 
-/* Toggle settings panel only mode */
 function toggleSettingsPanel() {
     const exercisePanel = document.getElementById('exercise-options-panel');
     const settingsPanel = document.getElementById('settings-panel');
@@ -165,6 +168,7 @@ function toggleTheme() {
 function resetProfile() {
     localStorage.removeItem('localWorkoutProfile');
     isSettingsMode = false;
+    hasProfileRegistered = false;
     document.getElementById('bg-audio').pause();
     document.getElementById('settings-panel').style.display = 'none';
     document.getElementById('exercise-options-panel').style.display = 'flex';
@@ -173,9 +177,19 @@ function resetProfile() {
     document.getElementById('welcome-screen').style.display = 'flex';
 }
 
+/* Clicking on the avatar launches profile configuration screen */
 function goToProfile() {
+    document.getElementById('profile-card-title').innerText = "Update Profile Details";
+    document.getElementById('save-profile-btn').innerText = "Apply Updates 🔄";
+    document.getElementById('back-to-dash-btn').style.display = 'block'; // Show cancel button
+    
     document.getElementById('exercise-screen').style.display = 'none';
     document.getElementById('profile-setup-card').style.display = 'block';
+}
+
+function backToDashboard() {
+    document.getElementById('profile-setup-card').style.display = 'none';
+    document.getElementById('exercise-screen').style.display = 'block';
 }
 
 async function loadProfileData() {
@@ -189,10 +203,11 @@ async function loadProfileData() {
         document.getElementById('user-phone').value = data.phone || '';
         document.getElementById('user-address').value = data.address || '';
         applyProfileToDashboard(data);
+        hasProfileRegistered = true;
     }
 }
 
-// Global mapping scope setup
+// Global scope initialization binding mappings
 window.startApp = startApp;
 window.switchAvatarView = switchAvatarView;
 window.previewUploadedFile = previewUploadedFile;
@@ -205,3 +220,4 @@ window.toggleMute = toggleMute;
 window.toggleTheme = toggleTheme;
 window.resetProfile = resetProfile;
 window.goToProfile = goToProfile;
+window.backToDashboard = backToDashboard;

@@ -16,9 +16,9 @@
             <button class="next-btn start-btn" onclick="startApp()">Start 🚀</button>
         </div>
 
-        <!-- Profile Setup Card -->
+        <!-- Profile Setup / View Card -->
         <div id="profile-setup-card" class="profile-card" style="display: none;">
-            <h2>Create Profile</h2>
+            <h2 id="profile-card-title">Create Profile</h2>
             
             <div class="form-grid">
                 <div>
@@ -42,7 +42,7 @@
                 </div>
                 <div>
                     <label>Password</label>
-                    <input type="password" id="user-password" placeholder="••••••">
+                    <input type="password" id="user-password" placeholder="•••••">
                 </div>
                 <div>
                     <label>Phone Number</label>
@@ -76,8 +76,9 @@
                 </select>
             </div>
 
-            <div style="margin-top: 20px;">
-                <button class="next-btn full-width-btn" id="save-profile-btn" onclick="validateAndSaveProfile()">Save Profile & Continue ➡️</button>
+            <div style="margin-top: 25px; display: flex; gap: 12px;">
+                <button class="next-btn" id="save-profile-btn" onclick="validateAndSaveProfile()" style="flex: 1;">Save & Continue ➡️</button>
+                <button class="nav-item-btn" id="back-to-dash-btn" onclick="backToDashboard()" style="display: none;">Cancel</button>
             </div>
         </div>
 
@@ -85,9 +86,10 @@
         <div id="exercise-screen" class="profile-card" style="display: none;">
             <div class="dashboard-header">
                 <h2 id="dashboard-title">Exercise Dashboard</h2>
-                <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
                     <button class="settings-circle-btn" id="settings-toggle-icon" onclick="toggleSettingsPanel()">⚙️</button>
-                    <div id="view-avatar-div" class="avatar-circle"></div>
+                    <!-- Clicking this avatar will now open/edit profile directly -->
+                    <div id="view-avatar-div" class="avatar-circle clickable-avatar" onclick="goToProfile()" title="View/Edit Profile"></div>
                 </div>
             </div>
 
@@ -96,10 +98,6 @@
                 <button class="exercise-choice-btn" id="btn-cardio" onclick="selectExerciseCategory('Cardio')">🏃 Cardio Training</button>
                 <button class="exercise-choice-btn" id="btn-strength" onclick="selectExerciseCategory('Strength')">🏋️ Strength Workout</button>
                 <button class="exercise-choice-btn" id="btn-yoga" onclick="selectExerciseCategory('Yoga')">🧘 Yoga & Flexibility</button>
-                
-                <div style="margin-top: 20px; display: flex; justify-content: center;">
-                    <button onclick="goToProfile()" class="nav-item">👤 Profile</button>
-                </div>
             </div>
 
             <!-- Settings Only Panel -->
