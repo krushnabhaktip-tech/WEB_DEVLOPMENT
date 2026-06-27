@@ -101,42 +101,62 @@
             <!-- Exercise Options Panel -->
             <div id="exercise-options-panel" class="workout-buttons">
                 <button class="exercise-choice-btn" id="btn-cardio" onclick="openStepTracker()">🏃 Walking & Running Tracker</button>
-                <button class="exercise-choice-btn" id="btn-strength" onclick="selectExerciseCategory('Strength')">🏋️ Strength Workout</button>
-                <button class="exercise-choice-btn" id="btn-yoga" onclick="selectExerciseCategory('Yoga')">🧘 Yoga & Flexibility</button>
+                <button class="exercise-choice-btn" id="btn-strength" onclick="openWorkoutRoutine('Strength')">🏋️ Strength Workout</button>
+                <button class="exercise-choice-btn" id="btn-yoga" onclick="openWorkoutRoutine('Yoga')">🧘 Yoga & Flexibility</button>
             </div>
 
-            <!-- 🏃 Premium Step Tracker Panel with 1-Month Plan Integration -->
+            <!-- 🏃 Step Tracker Panel -->
             <div id="step-tracker-panel" style="display: none; margin-top: 20px; text-align: center;">
-                
-                <!-- 📅 30 Days Header Info Display Box -->
                 <div class="day-info-box">
                     <h2 id="current-day-title">Day 1</h2>
                     <p id="day-type-text">🎯 Target Goal: 10 Steps</p>
                 </div>
-
-                <!-- 🎬 Workout Animation Box -->
                 <div class="workout-animation-container">
                     <span id="animation-emoji">🧍</span>
                 </div>
-
-                <!-- 👟 Custom Step Counter Display Card -->
                 <div class="counter-card">
                     <span class="counter-label">Steps Counted</span>
                     <h1 id="live-steps" style="cursor: pointer;">0</h1>
                     <p class="distance-text">🏁 Distance: <strong id="live-distance">0.00</strong> km</p>
-                    <small style="color: rgba(255,255,255,0.4); font-size: 11px; display: block; margin-top: 5px;">(Laptop Check: Click the number above to count steps)</small>
                 </div>
-
-                <!-- Curved Action Control Buttons -->
                 <div class="button-group">
                     <button id="start-track-btn" class="round-btn btn-start" onclick="toggleStepTracking()">Start Tracking 🟢</button>
-                    <!-- 💾 Save & Unlock Next Day -->
-                    <button id="save-day-btn" class="round-btn btn-save" onclick="saveAndNextDay()" style="display: none;">Save & Unlock Next Day 💾</button>
+                    <button id="save-day-btn" class="round-btn btn-save" onclick="saveAndNextDay()" style="display: none;">Save Progress 💾</button>
                     <button class="round-btn btn-back" onclick="closeStepTracker()">Back 🔙</button>
                 </div>
             </div>
 
-            <!-- Settings Only Panel -->
+            <!-- 🏋️🧘 Premium 30-Day Workout Exercise Play Panel (As per Screenshots) -->
+            <div id="workout-routine-panel" style="display: none; margin-top: 20px; text-align: center;">
+                <div class="day-info-box pink-theme-box">
+                    <h2 id="routine-day-title">Day 1 - Strength</h2>
+                    <p id="routine-day-sub">Exercise 1 of 10</p>
+                </div>
+
+                <!-- Live Exercise Animation Frame -->
+                <div class="workout-animation-container active-workout-frame">
+                    <span id="routine-emoji" class="workout-bounce">🏋️</span>
+                </div>
+
+                <div class="exercise-detail-card">
+                    <h3 id="routine-exercise-name">Jumping Jacks</h3>
+                    <!-- Big Pink Stopwatch Timer -->
+                    <div id="routine-timer-display">00:30</div>
+                </div>
+
+                <!-- Media Action Controls (Play/Pause/Skip) -->
+                <div class="media-controls-group">
+                    <button class="media-circle-btn btn-sec" onclick="navigateExercise(-1)">⏮️ Prev</button>
+                    <button id="media-play-pause-btn" class="media-main-pink-btn" onclick="toggleRoutineTimer()">PAUSE ⏸️</button>
+                    <button class="media-circle-btn btn-sec" onclick="navigateExercise(1)">Next ⏭️</button>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <button class="round-btn btn-back" onclick="closeWorkoutRoutine()" style="width: 100%;">Exit Workout 🔙</button>
+                </div>
+            </div>
+
+            <!-- Settings Panel -->
             <div id="settings-panel" style="display: none; margin-top: 20px;">
                 <label style="font-weight: 600; margin-bottom: 12px; display: block;">🔊 Background Track Volume</label>
                 <div class="music-control-row">

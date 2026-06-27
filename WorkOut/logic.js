@@ -14,31 +14,37 @@ let app, db;
 try {
     app = initializeApp(firebaseConfig);
     db = getFirestore(app);
-} catch (e) {
-    console.log("Offline view layout enabled.");
-}
+} catch (e) { console.log("Offline Mode Active"); }
 
-// 📅 30 Days Workout Plan Settings
-const workoutPlan = [
-    10, 10, 10, 10, 10, 10, 0,  // Week 1 (Day 1-7, Day 7 is Break)
-    15, 15, 15, 15, 15, 15, 0,  // Week 2 (Day 8-14)
-    20, 20, 20, 20, 20, 20, 0,  // Week 3 (Day 15-21)
-    25, 25, 25, 25, 25, 25, 0,  // Week 4 (Day 22-28)
-    30, 35                      // Day 29-30
+// 📋 10 Premium Exercise Bank with Different Emojis
+const exerciseBank = [
+    { name: "Jumping Jacks", emoji: "🤸" },
+    { name: "Squats Full Challenge", emoji: "🏋️" },
+    { name: "Push-Ups Mode", emoji: "💪" },
+    { name: "Adductor Stretch", emoji: "🧘" },
+    { name: "Mountain Climbers", emoji: "🧗" },
+    { name: "Burpees Fat Burn", emoji: "⚡" },
+    { name: "Plank Hold", emoji: "🧎" },
+    { name: "Lunges Left/Right", emoji: "🏃" },
+    { name: "High Knees Sprint", emoji: "🏃‍♀️" },
+    { name: "Crunches Core Core", emoji: "🧘‍♂️" }
 ];
 
 let currentDayIndex = parseInt(localStorage.getItem('userWorkoutDayIndex')) || 0;
+let selectedCategory = "Strength";
+let activeExerciseIndex = 0;
+let routineTimer = null;
+let routineSecondsLeft = 30;
+let isRoutineTimerRunning = false;
+
+// Tracker state
 let stepCount = 0;
 let isTracking = false;
-let lastAcceleration = { x: null, y: null, z: null };
-let shakeThreshold = 7; // સેન્સિટિવિટી લેવલ ફોર ફોન મોશન
-
 let restTime = 30;
 let uploadedAvatarData = null;
 let isMuted = false;
 let previousVolume = 0.5;
 let isSettingsMode = false;
-let hasProfileRegistered = false;
 
 window.onload = function() {
     loadProfileData();
@@ -51,27 +57,20 @@ function startApp() {
 
 function switchAvatarView() {
     const avatarType = document.querySelector('input[name="avatar-type"]:checked').value;
-    if (avatarType === 'upload') {
-        document.getElementById('avatar-input-container').style.display = 'block';
-        document.getElementById('anime-select-container').style.display = 'none';
-    } else {
-        document.getElementById('avatar-input-container').style.display = 'none';
-        document.getElementById('anime-select-container').style.display = 'block';
-    }
+    document.getElementById('avatar-input-container').style.display = avatarType === 'upload' ? 'block' : 'none';
+    document.getElementById('anime-select-container').style.display = avatarType === 'anime' ? 'block' : 'none';
 }
 
 function previewUploadedFile(event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
-            uploadedAvatarData = e.target.result;
-        };
+        reader.onload = function(e) { uploadedAvatarData = e.target.result; };
         reader.readAsDataURL(file);
     }
 }
 
-async function validateAndSaveProfile() {
+function validateAndSaveProfile() {
     const name = document.getElementById('user-name').value.trim();
     const age = document.getElementById('user-age').value.trim();
     const gender = document.getElementById('user-gender').value;
@@ -85,23 +84,14 @@ async function validateAndSaveProfile() {
     }
 
     const avatarType = document.querySelector('input[name="avatar-type"]:checked').value;
-    let avatarSrc = "";
+    let avatarSrc = avatarType === 'anime' ? document.getElementById('anime-dp-select').value : (uploadedAvatarData || "images/naruto.png");
 
-    if (avatarType === 'anime') {
-        avatarSrc = document.getElementById('anime-dp-select').value;
-    } else {
-        avatarSrc = uploadedAvatarData || "images/naruto.png";
-    }
-
-    const profileData = { name, age, gender, email, phone, address, avatarSrc, avatarType };
+    const profileData = { name, age, gender, email, phone, address, avatarSrc };
     localStorage.setItem('localWorkoutProfile', JSON.stringify(profileData));
 
     applyProfileToDashboard(profileData);
-    hasProfileRegistered = true;
-
     document.getElementById('profile-setup-card').style.display = 'none';
     document.getElementById('exercise-screen').style.display = 'block';
-    
     startBackgroundMusic();
 }
 
@@ -114,254 +104,155 @@ function startBackgroundMusic() {
     audio.play().catch(() => {});
 }
 
-function adjustVolume(val) {
-    const audio = document.getElementById('bg-audio');
-    audio.volume = val;
-    if (val > 0) {
-        isMuted = false;
-        document.getElementById('mute-btn').innerText = "🔊";
-        previousVolume = val;
-    } else {
-        isMuted = true;
-        document.getElementById('mute-btn').innerText = "🔇";
-    }
-}
-
-function toggleMute() {
-    const audio = document.getElementById('bg-audio');
-    const volumeSlider = document.getElementById('volume');
-    const muteBtn = document.getElementById('mute-btn');
-
-    if (!isMuted) {
-        previousVolume = audio.volume;
-        audio.volume = 0;
-        volumeSlider.value = 0;
-        muteBtn.innerText = "🔇";
-        isMuted = true;
-    } else {
-        audio.volume = previousVolume || 0.5;
-        volumeSlider.value = previousVolume || 0.5;
-        muteBtn.innerText = "🔊";
-        isMuted = false;
-    }
-}
-
-function toggleSettingsPanel() {
-    const exercisePanel = document.getElementById('exercise-options-panel');
-    const settingsPanel = document.getElementById('settings-panel');
-    const titleText = document.getElementById('dashboard-title');
-
-    if (!isSettingsMode) {
-        exercisePanel.style.display = 'none';
-        settingsPanel.style.display = 'block';
-        titleText.innerText = "Settings Configuration";
-        isSettingsMode = true;
-    } else {
-        settingsPanel.style.display = 'none';
-        exercisePanel.style.display = 'flex';
-        titleText.innerText = "Exercise Dashboard";
-        isSettingsMode = false;
-    }
-}
-
-function selectExerciseCategory(category) {
-    document.querySelectorAll('.exercise-choice-btn').forEach(btn => btn.style.borderColor = 'var(--border-color)');
-    if (category === 'Strength') document.getElementById('btn-strength').style.borderColor = 'var(--btn-primary)';
-    if (category === 'Yoga') document.getElementById('btn-yoga').style.borderColor = 'var(--btn-primary)';
-}
-
-function changeRestTime(amount) {
-    restTime = Math.max(0, restTime + amount);
-    document.getElementById('rest-display').innerText = restTime + "s";
-}
-
-function toggleTheme() {
-    document.body.classList.toggle('light-mode');
-}
-
-function resetProfile() {
-    localStorage.removeItem('localWorkoutProfile');
-    localStorage.removeItem('userWorkoutDayIndex');
-    currentDayIndex = 0;
-    isSettingsMode = false;
-    hasProfileRegistered = false;
-    document.getElementById('bg-audio').pause();
-    document.getElementById('settings-panel').style.display = 'none';
-    document.getElementById('exercise-options-panel').style.display = 'flex';
-    document.getElementById('dashboard-title').innerText = "Exercise Dashboard";
-    document.getElementById('exercise-screen').style.display = 'none';
-    document.getElementById('welcome-screen').style.display = 'flex';
-}
-
-function goToProfile() {
-    document.getElementById('profile-card-title').innerText = "Update Profile Details";
-    document.getElementById('save-profile-btn').innerText = "Apply Updates 🔄";
-    document.getElementById('back-to-dash-btn').style.display = 'block';
+// 🏋️🧘 --- 30-Day Hard Workout Progression Module ---
+function openWorkoutRoutine(category) {
+    selectedCategory = category;
+    activeExerciseIndex = 0;
     
-    document.getElementById('exercise-screen').style.display = 'none';
-    document.getElementById('profile-setup-card').style.display = 'block';
+    document.getElementById('exercise-options-panel').style.display = 'none';
+    document.getElementById('workout-routine-panel').style.display = 'block';
+    
+    loadCurrentDayExercise();
 }
 
-function backToDashboard() {
-    document.getElementById('profile-setup-card').style.display = 'none';
-    document.getElementById('exercise-screen').style.display = 'block';
+function loadCurrentDayExercise() {
+    let dayNumber = currentDayIndex + 1;
+    document.getElementById('routine-day-title').innerText = `Day ${dayNumber} - ${selectedCategory}`;
+
+    // Check if 7th Day (Rest Day)
+    if (dayNumber % 7 === 0) {
+        document.getElementById('routine-day-sub').innerText = "Rest Mode";
+        document.getElementById('routine-exercise-name').innerText = "🥳 Today is Relax & Break Day!";
+        document.getElementById('routine-emoji').innerText = "😴";
+        document.getElementById('routine-timer-display').innerText = "OFF";
+        document.getElementById('media-play-pause-btn').innerText = "Complete Rest Day ✅";
+        clearInterval(routineTimer);
+        isRoutineTimerRunning = false;
+        return;
+    }
+
+    // Dynamic Difficulty Logic: 30s for Week 1, 45s for Week 2, 60s for Week 3...
+    let weekNumber = Math.floor(currentDayIndex / 7) + 1;
+    routineSecondsLeft = 20 + (weekNumber * 10); // Dhire dhire hard standard time limit
+
+    document.getElementById('routine-day-sub').innerText = `Exercise ${activeExerciseIndex + 1} of 10`;
+    
+    let currentEx = exerciseBank[activeExerciseIndex];
+    document.getElementById('routine-exercise-name').innerText = currentEx.name;
+    document.getElementById('routine-emoji').innerText = currentEx.emoji;
+    
+    updateRoutineTimerUI();
+    pauseRoutineTimer();
 }
 
-async function loadProfileData() {
-    const localData = localStorage.getItem('localWorkoutProfile');
-    if (localData) {
-        const data = JSON.parse(localData);
-        document.getElementById('user-name').value = data.name || '';
-        document.getElementById('user-age').value = data.age || '';
-        document.getElementById('user-gender').value = data.gender || 'Male';
-        document.getElementById('user-email').value = data.email || '';
-        document.getElementById('user-phone').value = data.phone || '';
-        document.getElementById('user-address').value = data.address || '';
-        applyProfileToDashboard(data);
-        hasProfileRegistered = true;
+function updateRoutineTimerUI() {
+    let mins = Math.floor(routineSecondsLeft / 60).toString().padStart(2, '0');
+    let secs = (routineSecondsLeft % 60).toString().padStart(2, '0');
+    document.getElementById('routine-timer-display').innerText = `${mins}:${secs}`;
+}
+
+function toggleRoutineTimer() {
+    let dayNumber = currentDayIndex + 1;
+    if (dayNumber % 7 === 0) {
+        // Rest Day finish bypass click
+        finishDayWorkoutPlan();
+        return;
+    }
+
+    if (isRoutineTimerRunning) {
+        pauseRoutineTimer();
+    } else {
+        startRoutineTimer();
     }
 }
 
-// 🏃 --- Step Tracker Core Logic with 1-Month Plan Plan ---
+function startRoutineTimer() {
+    isRoutineTimerRunning = true;
+    document.getElementById('media-play-pause-btn').innerText = "PAUSE ⏸️";
+    
+    routineTimer = setInterval(() => {
+        if (routineSecondsLeft > 0) {
+            routineSecondsLeft--;
+            updateRoutineTimerUI();
+        } else {
+            clearInterval(routineTimer);
+            isRoutineTimerRunning = false;
+            // Next Auto exercise
+            navigateExercise(1);
+        }
+    }, 1000);
+}
+
+function pauseRoutineTimer() {
+    clearInterval(routineTimer);
+    isRoutineTimerRunning = false;
+    document.getElementById('media-play-pause-btn').innerText = "PLAY ▶️";
+}
+
+function navigateExercise(direction) {
+    let dayNumber = currentDayIndex + 1;
+    if (dayNumber % 7 === 0) return; // No entries on rest day
+
+    activeExerciseIndex += direction;
+    
+    if (activeExerciseIndex >= 10) {
+        finishDayWorkoutPlan();
+    } else if (activeExerciseIndex < 0) {
+        activeExerciseIndex = 0;
+    } else {
+        loadCurrentDayExercise();
+    }
+}
+
+function finishDayWorkoutPlan() {
+    alert(`🎉 Magnificent! You successfully finished today's Routine Workout Session!`);
+    currentDayIndex++;
+    localStorage.setItem('userWorkoutDayIndex', currentDayIndex);
+    closeWorkoutRoutine();
+}
+
+function closeWorkoutRoutine() {
+    pauseRoutineTimer();
+    document.getElementById('workout-routine-panel').style.display = 'none';
+    document.getElementById('exercise-options-panel').style.display = 'flex';
+}
+
+// 🏃 Existing Tracker Components
 function openStepTracker() {
     document.getElementById('exercise-options-panel').style.display = 'none';
-    document.getElementById('settings-panel').style.display = 'none';
     document.getElementById('step-tracker-panel').style.display = 'block';
-    updateDayUI();
-}
-
-function updateDayUI() {
     let dayNumber = currentDayIndex + 1;
-    let target = workoutPlan[currentDayIndex];
-    
     document.getElementById('current-day-title').innerText = `Day ${dayNumber}`;
-    document.getElementById('dashboard-title').innerText = `Day ${dayNumber} Tracker 🏁`;
-    
-    if (target === 0) {
-        document.getElementById('day-type-text').innerText = "🥳 Today is Rest/Break Day!";
-        document.getElementById('start-track-btn').style.display = 'none';
-        document.getElementById('save-day-btn').style.display = 'block';
-        document.getElementById('save-day-btn').innerText = "Complete Rest Day & Next ➡️";
-    } else {
-        document.getElementById('day-type-text').innerText = `🎯 Target Goal: ${target} Steps`;
-        document.getElementById('start-track-btn').style.display = 'block';
-        document.getElementById('save-day-btn').style.display = 'none';
-    }
 }
-
 function closeStepTracker() {
-    stopStepTracking();
     document.getElementById('step-tracker-panel').style.display = 'none';
     document.getElementById('exercise-options-panel').style.display = 'flex';
-    document.getElementById('dashboard-title').innerText = "Exercise Dashboard";
 }
 
-function toggleStepTracking() {
-    const btn = document.getElementById('start-track-btn');
-    const emoji = document.getElementById('animation-emoji');
-
-    if (!isTracking) {
-        startStepTracking();
-        btn.innerText = "Stop Tracking 🛑";
-        btn.style.background = "linear-gradient(135deg, #e74c3c, #c0392b)";
-        emoji.innerText = "🏃‍♀️💨";
-        emoji.classList.add('running-shake');
-    } else {
-        stopStepTracking();
-        btn.innerText = "Start Tracking 🟢";
-        btn.style.background = "linear-gradient(135deg, #2ecc71, #27ae60)";
-        emoji.innerText = "🧍";
-        emoji.classList.remove('running-shake');
-    }
+// Settings Components
+function toggleSettingsPanel() {
+    isSettingsMode = !isSettingsMode;
+    document.getElementById('exercise-options-panel').style.display = isSettingsMode ? 'none' : 'flex';
+    document.getElementById('settings-panel').style.display = isSettingsMode ? 'block' : 'none';
+}
+function changeRestTime(amount) { restTime = Math.max(0, restTime + amount); document.getElementById('rest-display').innerText = restTime + "s"; }
+function toggleTheme() { document.body.classList.toggle('light-mode'); }
+function toggleMute() { isMuted = !isMuted; document.getElementById('bg-audio').muted = isMuted; document.getElementById('mute-btn').innerText = isMuted ? "🔇" : "🔊"; }
+function adjustVolume(val) { document.getElementById('bg-audio').volume = val; }
+function resetProfile() { localStorage.clear(); location.reload(); }
+function goToProfile() { document.getElementById('exercise-screen').style.display = 'none'; document.getElementById('profile-setup-card').style.display = 'block'; }
+function backToDashboard() { document.getElementById('profile-setup-card').style.display = 'none'; document.getElementById('exercise-screen').style.display = 'block'; }
+async function loadProfileData() {
+    const localData = localStorage.getItem('localWorkoutProfile');
+    if (localData) { applyProfileToDashboard(JSON.parse(localData)); }
 }
 
-function startStepTracking() {
-    isTracking = true;
-    
-    if (window.DeviceMotionEvent) {
-        window.addEventListener('devicemotion', handleMotion);
-    }
-
-    // 💻 લેપટોપ ટેસ્ટિંગ માટે સેટઅપ (0 નંબર પર ક્લિક કરવાથી સ્ટેપ્સ વધશે!)
-    document.getElementById('live-steps').onclick = function() {
-        if(isTracking) countOneStep();
-    };
-}
-
-function stopStepTracking() {
-    isTracking = false;
-    window.removeEventListener('devicemotion', handleMotion);
-}
-
-function handleMotion(event) {
-    if (!isTracking) return;
-
-    let acc = event.acceleration || event.accelerationIncludingGravity;
-    if (!acc || acc.x === null || acc.y === null || acc.z === null) return;
-
-    if (lastAcceleration.x !== null) {
-        let deltaX = Math.abs(lastAcceleration.x - acc.x);
-        let deltaY = Math.abs(lastAcceleration.y - acc.y);
-        let deltaZ = Math.abs(lastAcceleration.z - acc.z);
-
-        if ((deltaX > shakeThreshold && deltaY > shakeThreshold) || 
-            (deltaY > shakeThreshold && deltaZ > shakeThreshold) ||
-            (deltaX > shakeThreshold && deltaZ > shakeThreshold)) {
-            countOneStep();
-        }
-    }
-    lastAcceleration = { x: acc.x, y: acc.y, z: acc.z };
-}
-
-function countOneStep() {
-    stepCount++;
-    document.getElementById('live-steps').innerText = stepCount;
-    let distance = stepCount * 0.00075;
-    document.getElementById('live-distance').innerText = distance.toFixed(2);
-
-    let targetGoal = workoutPlan[currentDayIndex];
-    if (stepCount >= targetGoal && targetGoal > 0) {
-        document.getElementById('save-day-btn').style.display = 'block';
-        document.getElementById('save-day-btn').innerText = "Goal Achieved! Save & Next Day 💾";
-    }
-}
-
-// 💾 બ્રાઉઝર સ્ટોરેજમાં પ્રગતિ સેવ કરવાનું બટન
-function saveAndNextDay() {
-    let dayNumber = currentDayIndex + 1;
-    alert(`🎉 Day ${dayNumber} Progress Saved!`);
-    
-    currentDayIndex++;
-    if (currentDayIndex >= workoutPlan.length) {
-        alert("🏆 MAGICAL! You completed the full 1-Month Workout Challenge! 🌟");
-        currentDayIndex = 0;
-    }
-    
-    localStorage.setItem('userWorkoutDayIndex', currentDayIndex);
-    
-    // નવો દિવસ સેટઅપ
-    stepCount = 0;
-    document.getElementById('live-steps').innerText = "0";
-    document.getElementById('live-distance').innerText = "0.00";
-    
-    stopStepTracking();
-    
-    const btn = document.getElementById('start-track-btn');
-    btn.innerText = "Start Tracking 🟢";
-    btn.style.background = "linear-gradient(135deg, #2ecc71, #27ae60)";
-    document.getElementById('animation-emoji').innerText = "🧍";
-    document.getElementById('animation-emoji').classList.remove('running-shake');
-
-    updateDayUI();
-}
-
-// Global scope initialization binding mappings
+// Global scope mapping window bindings
 window.startApp = startApp;
 window.switchAvatarView = switchAvatarView;
 window.previewUploadedFile = previewUploadedFile;
 window.validateAndSaveProfile = validateAndSaveProfile;
 window.toggleSettingsPanel = toggleSettingsPanel;
-window.selectExerciseCategory = selectExerciseCategory;
 window.changeRestTime = changeRestTime;
 window.adjustVolume = adjustVolume;
 window.toggleMute = toggleMute;
@@ -369,8 +260,10 @@ window.toggleTheme = toggleTheme;
 window.resetProfile = resetProfile;
 window.goToProfile = goToProfile;
 window.backToDashboard = backToDashboard;
-
 window.openStepTracker = openStepTracker;
 window.closeStepTracker = closeStepTracker;
-window.toggleStepTracking = toggleStepTracking;
-window.saveAndNextDay = saveAndNextDay;
+
+window.openWorkoutRoutine = openWorkoutRoutine;
+window.closeWorkoutRoutine = closeWorkoutRoutine;
+window.toggleRoutineTimer = toggleRoutineTimer;
+window.navigateExercise = navigateExercise;
