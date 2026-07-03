@@ -318,3 +318,15 @@ function updateStepUI() {
         document.getElementById('save-day-btn').style.display = 'block';
     }
 }
+function toggleSettingsPanel() {
+    const exerciseScreen = document.getElementById('exercise-screen');
+    const settingsScreen = document.getElementById('pure-settings-screen');
+
+    if (settingsScreen.style.display === 'none') {
+        exerciseScreen.style.display = 'none';
+        settingsScreen.style.display = 'block';
+    } else {
+        settingsScreen.style.display = 'none';
+        exerciseScreen.style.display = 'block';
+    }
+}
