@@ -330,3 +330,36 @@ function toggleSettingsPanel() {
         exerciseScreen.style.display = 'block';
     }
 }
+function handleCategoryChange() {
+    const select = document.getElementById('audio-category-select');
+    const localContainer = document.getElementById('local-audio-input-container');
+    const audio = document.getElementById('bg-audio');
+
+    if (select.value === 'local') {
+        localContainer.style.display = 'block';
+    } else {
+        localContainer.style.display = 'none';
+        audio.src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+        if (musicStarted && !isMuted) {
+            audio.play().catch(err => console.log(err));
+        }
+    }
+}
+
+function loadLocalAudio(event) {
+    const file = event.target.files[0];
+    const audio = document.getElementById('bg-audio');
+
+    if (file) {
+        const fileURL = URL.createObjectURL(file);
+        audio.src = fileURL;
+        
+        if (!musicStarted) {
+            musicStarted = true;
+        }
+        
+        if (!isMuted) {
+            audio.play().catch(err => console.log(err));
+        }
+    }
+}

@@ -272,3 +272,10 @@ body.light-mode .dynamic-theme-btn {
     background: rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
+body.light-mode #local-audio-input-container label {
+    color: #2c3e50;
+}
+
+body.light-mode #local-audio-file {
+    color: #2c3e50 !important;
+}
