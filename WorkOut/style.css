@@ -232,3 +232,31 @@ input, select {
     outline: none;
     transition: all 0.2s ease;
 }
+/* Light Mode Variables */
+body.light-mode {
+    --bg-gradient: linear-gradient(135deg, #e0e5ec, #b8c6db);
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --text-color: #2c3e50;
+    --input-bg: rgba(0, 0, 0, 0.05);
+    --input-focus-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* Light mode mein cards ke border aur text ka color sahi dikhne ke liye */
+body.light-mode .profile-card {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+}
+
+body.light-mode label {
+    color: #2c3e50;
+}
+
+body.light-mode input, body.light-mode select {
+    color: #2c3e50 !important;
+}
+
+body.light-mode .exercise-choice-btn {
+    color: #2c3e50;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
