@@ -279,3 +279,27 @@ body.light-mode #local-audio-input-container label {
 body.light-mode #local-audio-file {
     color: #2c3e50 !important;
 }
+body {
+    background: url('bg-images/workout-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: var(--text-color);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 15px;
+}
+
+body.light-mode {
+    background: url('bg-images/workout-bg-light.jpg') no-repeat center center fixed;
+    background-size: cover;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --text-color: #2c3e50;
+    --input-bg: rgba(0, 0, 0, 0.05);
+    --input-focus-bg: rgba(0, 0, 0, 0.1);
+}
+
+.welcome-spacer {
+    height: 35px !important;
+}
