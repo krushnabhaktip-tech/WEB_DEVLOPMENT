@@ -139,6 +139,8 @@
 
           <div id="pure-settings-screen" class="profile-card" style="display: none;">
             <div class="dashboard-header">
+                 <div id="pure-settings-screen" class="profile-card" style="display: none;">
+            <div class="dashboard-header">
                 <h2>⚙️ System Settings</h2>
                 <button class="settings-circle-btn" onclick="toggleSettingsPanel()">⚙️</button>
             </div>
@@ -148,17 +150,14 @@
                 🔊 Audio Status: Playing
             </button>
             
-            <div style="text-align: left; margin-bottom: 15px;">
-                <label>🎵 Select Music Category</label>
-                <select id="audio-category-select" onchange="handleCategoryChange()">
-                    <option value="default">Default Yoga Music (Online) 🧘</option>
-                    <option value="local">Upload from Laptop 💻</option>
+            <div style="text-align: left; margin-bottom: 20px;">
+                <label>🎵 Choose Background Track</label>
+                <select id="direct-song-select" onchange="changeBackgroundSong()">
+                    <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Default Music (Online) 🧘</option>
+                    <option value="songs/yoga.mp3">Yoga Meditation Track 🧘‍♂️</option>
+                    <option value="songs/bhajan.mp3">Morning Bhajan 🕉️</option>
+                    <option value="songs/bollywood.mp3">Bollywood Workout Beat 💃</option>
                 </select>
-            </div>
-
-            <div id="local-audio-input-container" style="text-align: left; margin-bottom: 20px; display: none;">
-                <label>📂 Choose Audio (Bollywood, Bhajan, Yoga MP3)</label>
-                <input type="file" id="local-audio-file" accept="audio/*" onchange="loadLocalAudio(event)">
             </div>
             
             <div style="text-align: left; margin-bottom: 20px;">
@@ -166,6 +165,8 @@
                 <input type="range" id="volume" min="0" max="1" step="0.1" value="0.4" oninput="adjustVolume(this.value)" style="margin-top: 10px; width: 100%;">
             </div>
             
+            <button class="round-btn btn-back dynamic-theme-btn" onclick="toggleTheme()">🌓 Switch Dark/Light Theme</button>
+        </div>
             <button class="round-btn btn-back dynamic-theme-btn" onclick="toggleTheme()">🌓 Switch Dark/Light Theme</button>
         </div>
     <audio id="bg-audio" loop>

@@ -346,20 +346,15 @@ function handleCategoryChange() {
     }
 }
 
-function loadLocalAudio(event) {
-    const file = event.target.files[0];
+ 
+function changeBackgroundSong() {
+    const songSelect = document.getElementById('direct-song-select');
     const audio = document.getElementById('bg-audio');
-
-    if (file) {
-        const fileURL = URL.createObjectURL(file);
-        audio.src = fileURL;
-        
-        if (!musicStarted) {
-            musicStarted = true;
-        }
-        
-        if (!isMuted) {
-            audio.play().catch(err => console.log(err));
-        }
+    
+    audio.src = songSelect.value;
+    musicStarted = true;
+    
+    if (!isMuted) {
+        audio.play().catch(err => console.log(err));
     }
 }
