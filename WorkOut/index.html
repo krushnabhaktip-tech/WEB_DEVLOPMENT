@@ -137,8 +137,11 @@
             </div>
         </div>
 
-        <div id="pure-settings-screen" class="profile-card" style="display: none;">
-            <h2>⚙️ System Settings</h2>
+          <div id="pure-settings-screen" class="profile-card" style="display: none;">
+            <div class="dashboard-header">
+                <h2>⚙️ System Settings</h2>
+                <button class="settings-circle-btn" onclick="toggleSettingsPanel()">⚙️</button>
+            </div>
             <div class="welcome-spacer" style="height: 15px;"></div>
             
             <button id="quick-mute-btn" class="round-btn btn-start" onclick="toggleMute()" style="margin-bottom: 20px;">
@@ -146,14 +149,12 @@
             </button>
             
             <div style="text-align: left; margin-bottom: 20px;">
-                <label>🔊 Background Track Volume Adjust</label>
+                <label id="volume-label">🔊 Background Track Volume Adjust</label>
                 <input type="range" id="volume" min="0" max="1" step="0.1" value="0.4" oninput="adjustVolume(this.value)" style="margin-top: 10px; width: 100%;">
             </div>
             
-            <button class="round-btn btn-back" onclick="toggleTheme()" style="margin-bottom: 12px;">🌓 Switch Dark/Light Theme</button>
-            <button class="round-btn btn-save" onclick="closeSettingsPanel()">Close & Apply Settings</button>
+            <button class="round-btn btn-back dynamic-theme-btn" onclick="toggleTheme()">🌓 Switch Dark/Light Theme</button>
         </div>
-    </div>
 
     <audio id="bg-audio" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
